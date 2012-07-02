@@ -14,11 +14,10 @@ gaslist = {'He','Ne','Ar','Kr','Xe','O2','O18','O17','O35','O36'};
 
 
 % BATS
-load batsinitgas_99;
+% load batsinitgas_99;
 % identify which gases are to be run
 gases = intersect(gaslist,tracer_name);
 ngas = length(gases);
-% Gas = zeros(nz,ngas);
 
 xG = zeros(length(ngas));
 
@@ -45,9 +44,6 @@ for igas = 1:ngas
     else
         Tracer(:,tr2ind(gas)) = gasmoleq(S,T,gas);
         xG(igas) = gas_mole_fract(gas);
-%         ini = find(strcmp(gas,initgas_head));
-%         Tracer(:,tr2ind(gas)) = interp1(initgas(:,1),initgas(:,ini),z).*gasmoleq(S,T,gas)./100;
-%         xG(igas) = gas_mole_fract(gas);
     end
 end
 

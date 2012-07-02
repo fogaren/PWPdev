@@ -8,7 +8,7 @@
 % PWP paths
 
 % CHANGE pwp_root to point to where PWP is located on your local machine
-pwp_root = 'Users/Roo/Documents/';
+pwp_root = '/Users/Roo/Documents/';
 core_path = [pwp_root 'PWPdev/PWPcore'];
 lib_path = [pwp_root 'PWPdev/function_library'];
 
@@ -68,15 +68,15 @@ zbscale=0.5; % scaling factor for depth of bubble penetration -- see inigasa for
 % -------------------------------------------------------------------------
 
 % Ekman heat transport (W/m2)
-EkmHeatConv = -28;
+EkmHeatConv = 12;
 %EkmHeatConv = 0;
 % Depth range of lateral heat flux (in 100's of meters)
-VHEC= 0.5;
+VHEC= 2;
 % Ekman salt convergence due to fresh water downward pumping
 EkmSaltConv = 1.75E-6;  
 
 % Vertical diffusivity (m2/s)
-Kz = 11*1e-5;
+Kz = 8*1e-5;
 TracerDiffFactor = 1;
 Kt = TracerDiffFactor*Kz;
 

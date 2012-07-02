@@ -6,22 +6,12 @@
 		UV(ii:ii+1,1)=UVm(1)*ones(2,1);
 		UV(ii:ii+1,2)=UVm(2)*ones(2,1);
 %
-%	comment out below if you are not using gases
+%	mix gas tracers !!!! is NO3 mixed??
 %
 	for igas=1:ngas
 		gas = gases{igas};
         Trmean=mean(Tracer(ii:ii+1,tr2ind(gas)));
 		Tracer(ii:ii+1,tr2ind(gas))=Trmean*ones(2,1);
     end
-%     
-%     
-%     for igas=1:ngas
-% 		Gmean=mean(o18(ii:ii+1));
-% 		o18(ii:ii+1)=Gmean;
-%     end
-%     
-%     for igas=1:ngas
-% 		Gmean=mean(o17(ii:ii+1));
-% 		o17(ii:ii+1)=Gmean;
-% 	end
+
 	
