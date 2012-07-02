@@ -45,7 +45,10 @@ for yr = yr_rng(1):yr_rng(2)
     
     latyr = lat(yrvec(:,1) == yr);
     lonyr = lon(yrvec(:,1) == yr);
-    dn_tyr = datenum(t(yrvec(:,1) == yr),1,1);
+%     dn_tyr = datenum(t(yrvec(:,1) == yr),1,1);
+    days_yr = datenum(yr+1,1,1) - datenum(yr,1,1);
+    t_yr = t(yrvec(:,1) == yr); 
+    dn_tyr = doy2date((t_yr - floor(t_yr)) * days_yr, floor(t_yr));
     % data domain for yr
     dn_trng = [min(dn_tyr) max(dn_tyr)];
     
@@ -58,7 +61,19 @@ for yr = yr_rng(1):yr_rng(2)
     srfpath = [ncep_path '/surface/'];
     
     % get time vector, ncep lat and lon grids
-    time = ncread([flxpath 'uwnd.10m.gauss' '.' num2str(yr) '.nc'],'time');
+    % Note: Different NCEP variables can be updated to different date
+    time = ncread([flxpath 'uwnd.10m.gauss' '.' num2str(yr) '.nc'],'time'); 
+    time = intersect(time,ncread([flxpath 'vwnd.10m.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'nswrs.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'nlwrs.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'shtfl.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'lhtfl.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'prate.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'uflx.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'vflx.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([srfpath 'rhum.sig995' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([srfpath 'air.sig995' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([srfpath 'slp' '.' num2str(yr) '.nc'],'time')); 
     
     % ncep time --> matlab datenumber
     % for some reason need to add a 48 hour offset....

@@ -22,8 +22,9 @@ addpath(core_path,0);
 % -------------------------------------------------------------------------
 % Running Mode, No float data or Nudging with float data
 % -------------------------------------------------------------------------
-floatON_OFF = 0; % floatON_OFF=0, No float data, fixed location 
-             % floatON_OFF=1, Nudging with float data, location determined by
+global nofloat
+nofloat = 1; % nofloat=1, No float data, fixed location 
+             % nofloat=0, Nudging with float data, location determined by
              % float data
 
 % -------------------------------------------------------------------------
@@ -95,8 +96,6 @@ Kt = TracerDiffFactor*Kz;
 % output storage arrays
 % -------------------------------------------------------------------------
 
-if floatON_OFF == 1
-
 outt = [];
 outS = [];
 outT = [];
@@ -105,8 +104,6 @@ outdT = [];
 outTra = [];
 outD_Tra = [];
 outPV = [];
-
-end
 
 % -------------------------------------------------------------------------
 % run model

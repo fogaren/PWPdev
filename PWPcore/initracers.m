@@ -39,7 +39,12 @@ for igas = 1:ngas
         ini = find(strcmp('O2',initgas_head));
         xG(igas) = gas_mole_fract('O2');
     elseif ismember(gas,float_tracers)
-        Tracer(:,tr2ind(gas)) = sw_dens0(float.S(:,3),float.T(:,3)).*float.tr(:,3,tr2ind(gas))./1e6;
+        % Luo: do not know how to amende this part
+        if floatON_OFF == 1
+            Tracer(:,tr2ind(gas)) = sw_dens0(float.S(:,3),float.T(:,3)).*float.tr(:,3,tr2ind(gas))./1e6;
+        else
+            Tracer(:,tr2ind(gas)) = sw_dens0(S,T).*(zeros(size(S))+0.1)./1e6;
+        end
         Tracer(499:end,tr2ind(gas)) = Tracer(498,tr2ind(gas));
         xG(igas) = gas_mole_fract(gas);
     else

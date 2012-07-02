@@ -4,6 +4,8 @@
 load([float_path '/' floatfile]);
 float_tracers = {'O2','NO3'};
 
+if floatON_OFF == 1
+
 activetr = intersect(float_tracers,tracer_name);
 nactive = length(activetr);
 
@@ -34,7 +36,4 @@ yrstart = float.t(1,1);
 % decimal date of end of float data (pad one day)
 yrstop = float.t(1,end)+1/365;
 
-
-
-
-
+end
