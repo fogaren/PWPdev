@@ -13,7 +13,13 @@
           mld=ii+1;			% deepen by one step?
           mlmix;			% mix everything up
             % now need to recalculate the Ri no, but only to mld+1
+          dS = diff(Sig); % Luo: am I correct? dS needs to be recalculated too
           Ri=BRiFac*dS./(sum((diff(UV).^2),2)+epsUV); 
           nbri=nbri+1;			% keep track of activity
+      else
+          break; % Luo: wherever Ri larger than critical value, do not 
+                 % check below. When I used HOE-DYLAN as initial condition,
+                 % there was one depth in >1,000 m satisfying Bulk Ri,
+                 % which resulted in a unrevertable mixing to that depth.
       end
   end          

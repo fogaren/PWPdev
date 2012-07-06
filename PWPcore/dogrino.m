@@ -8,5 +8,5 @@
       if Ri(ii) < GRiCrit
       	stirit;				% if < critical, stir two layers
       	ngri=ngri+1;			% keep track of activity
-        end
+      end
    end

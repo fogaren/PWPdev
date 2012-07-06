@@ -193,11 +193,6 @@ wimt=Kt*dt/dz/dz*ones(nz,1); wpt=wimt; wimt(1)=0; wi0t=1-wpt-wimt; wi0t(1)=1-wpt
 %	Various factors/vectors of convenience
 % -------------------------------------------------------------------------
 
-% recording interval in # per day
-tintv = 4;%tday./dt;
-% convert to number of time steps
-tintv=round(tday./(dt.*tintv));	NumPerYear = 48;	% sampling interval = #/month
-
 % index of float profile times
 if floatON_OFF == 1
     tprofind = round(interp1(t,1:length(t),float.t(1,:)));

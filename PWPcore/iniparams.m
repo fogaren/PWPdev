@@ -17,16 +17,21 @@ R = 8.314;              % gas constant
 % Model parameters
 % -------------------------------------------------------------------------
 
-z = [1:2:1000]'; 
+z = [1:2:1500]'; 
 nz = length(z);
 dz = 2;
-zmax = 1000; 
+zmax = 1500; 
 
 yrstart = 2011 + 143/366; % initial time, 05/23/2011 00:00 (retrieved from HOE-DYLAN1, 05/23/2012, 22:00)
 yrmax = 2012 + 273/366; % maximum end time, 09/30/2012 0000
-yroutstp = 0.25/366; % output time step, 0.25 day (6 hours)
 lat0 = 22.75;
 lon0 = -158;
+% recording interval in # per day
+tintv = 1;%tday./dt;
+% convert to number of time steps
+tintv=round(tday./(dt.*tintv));	
+NumPerYear = 48; % screen output every # of recordings
+
 
 BRiFac=g*dz/rho_m;		% factor for bulk Ri No Calculation
 GRiFac=g*dz/rho_m;		% factor for Grad Ri No Calculation

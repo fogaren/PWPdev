@@ -20,6 +20,7 @@ if now == 0
     
     
     nclock=nclock + 1;
+%     fprintf('%i,%i\r', it, nclock);
     if nclock >= NumPerYear				% report once a decade! 
         fprintf('%.2f\r',t(it));
         nclock = 0;
