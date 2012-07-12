@@ -14,8 +14,9 @@ mld=1;				% start with shoalest mixed layer
 for i=1:nz-1				% static stability adjustment
     if Sig(i) > Sig(i+1)	% if unstable mix density of mixed layer
         mld=i+1;
-        Sigm=mean(Sig(1:mld)); 		% just mix density at first
-        Sig(1:mld)=Sigm*ones(mld,1);
+        mlmix;
+%         Sigm=mean(Sig(1:mld)); 		% just mix density at first
+%         Sig(1:mld)=Sigm*ones(mld,1);
         nstin=nstin+1;
     else
         break;

@@ -22,14 +22,13 @@ nz = length(z);
 dz = 2;
 zmax = 1500; 
 
-yrstart = 2011 + 143/366; % initial time, 05/23/2011 00:00 (retrieved from HOE-DYLAN1, 05/23/2012, 22:00)
+% yrstart = 2009 + 143/366; % initial time, 05/23/2011 00:00 (retrieved from HOE-DYLAN1, 05/23/2012, 22:00)
+yrstart = 2007.1005;
 yrmax = 2012 + 273/366; % maximum end time, 09/30/2012 0000
-lat0 = 22.75;
-lon0 = -158;
+% lat0 = 22.75;
+% lon0 = -158;
 % recording interval in # per day
-tintv = 1;%tday./dt;
-% convert to number of time steps
-tintv=round(tday./(dt.*tintv));	
+toutv = 1;
 NumPerYear = 48; % screen output every # of recordings
 
 

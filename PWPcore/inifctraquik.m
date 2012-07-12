@@ -61,6 +61,8 @@ z=[dz/2:dz:zmax-dz/2]'; nz=length(z); zp=[0:dz:zmax];	% useful depth vectors
 tmax=nyrs*tyr; nt=nyrs*tyr/dt;                  % time constants
 treport = tyr;  nreport = treport/dt;           % report once a year
 t=[1:nt]*dt/tyr + yrstart; tpf=2*pi*t/tyr;		% time vector, etc.
+% recording time interval: convert to number of time steps
+tintv=round(tday./(dt.*toutv));	
 
 %
 %		the following for easy sigmaT calculation
@@ -174,6 +176,7 @@ hfactor=540 * 1000 / j2cal;	% converts watts to kg/s
 % -------------------------------------------------------------------------
 
 NetEminusPOffset=csaps(F.DateTime,F.PRATE-F.nLHTFL/hfactor,LowPassFactor,F.DateTime);		% balance salt
+% NetEminusPOffset=F.PRATE-F.nLHTFL/hfactor;		% balance salt
 FWFlux=FWfact * (F.PRATE - F.nLHTFL/hfactor - NetEminusPOffset - EkmSaltConv); 
 FWFlux=1-FWFlux/1000;			% convert to salinity multiplier (1 - kg/m^3)
 FWFlux=interp1(F.DateTime,FWFlux,t,'linear');		% recast onto time vector

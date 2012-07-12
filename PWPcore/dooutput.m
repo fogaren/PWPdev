@@ -16,7 +16,7 @@ if now == 0
     tml = [tml T(1)]; sml = [sml S(1)];
     nbri=nbri/noften; ngri=ngri/noften; nstin=nstin/noften;
     nnbri=[nnbri nbri]; nngri=[nngri ngri]; nnstin=[nnstin nstin];
-    zmld=[zmld dz*mld];
+    zmld=[zmld dz*mld]; zmld2 = [zmld2 dz*mld_sig(Sig)];
     
     
     nclock=nclock + 1;

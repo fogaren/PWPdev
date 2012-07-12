@@ -61,7 +61,7 @@ O2fact = 1;  % scaling factor for float O2
 
 % power of piston velocity
 pvpower = 2; 
-LowPassFactor = 1E-5;
+LowPassFactor = 0.99999; %1E-5;
 
 % Air sea exchange magnitude factors
 gasexfact = 0.9332;         % relative to Wanninkof 1992
@@ -76,10 +76,10 @@ zbscale=0.5; % scaling factor for depth of bubble penetration -- see inigasa for
 % -------------------------------------------------------------------------
 
 % Ekman heat transport (W/m2)
-EkmHeatConv = 12; %-28;
+EkmHeatConv = 12; %24; %-28;
 % EkmHeatConv = 0;
 % Depth range of lateral heat flux (in 100's of meters)
-VHEC= 2; %0.5;
+VHEC= 2; %0.5; %0.5;
 % Ekman salt convergence due to fresh water downward pumping
 EkmSaltConv = 1.75E-6;  
 

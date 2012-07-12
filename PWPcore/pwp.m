@@ -28,8 +28,6 @@ for it=1:nt
     
     T(1)=T(1)+thf(it);		% add sensible + latent heat flux
     S(1)=S(1)*FWFlux(it);   % alter salinity due to precip/evap
-    T(1:mld) = mean(T(1:mld));
-    S(1:mld) = mean(S(1:mld));
     T=T+rhf(it)*dRdz;       % add radiant heat to profile
     T=T+hhc(it)*vhec;       % add horizontal eddy heat convergence
     dogasheatcorr;          % maintain gas sat. when heat is added

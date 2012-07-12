@@ -12,12 +12,12 @@ catch
         F = get_forcing(ncep_path,float.lat(5,:),float.lon(5,:),float.t(5,:));
         latitude = float.lat_mean;
     elseif floatON_OFF == 0
-        tseries = yrstart:yroutstp:yrmax;
+        tseries = yrstart:(yrmax-yrstart)/20:yrmax;
         latseries = tseries*0 + lat0;
         lonseries = tseries*0 + lon0;
         F = get_forcing(ncep_path, latseries, lonseries, tseries);
         latitude = lat0;
-        yrstop = F.DateTime(end) + 1/365;
+        yrstop = F.DateTime(end);
     end
 end
 
