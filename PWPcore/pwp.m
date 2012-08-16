@@ -10,8 +10,9 @@
 % -------------------------------------------------------------------------
 
 iniparams;
-inihydrors97;
+%inihydrors97;
 inifloatdata;
+inihydrors;
 iniforcing;
 inifctraquik;               % Initialize useful factors                       
 inibio;                     % initialze biological parameters
@@ -38,9 +39,11 @@ for it=1:nt
     gasexchak;              % exchange gases
     dogrino;                % do gradient  Ri No Adjustment
     advdif;                 % advect and diffuse 
-    dooutput;
-    modelout;               % if time, save data 
     
+    %modelout;               % if time, save data 
+    rho_nudge;              % nudge tracers to float obs
+    restoreTS; 
+    dooutput;
 end
 
 %etime(clock,t0)/60

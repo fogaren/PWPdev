@@ -27,12 +27,22 @@ for ii = 1:nactive
     float.tr(1:4,:,tr2ind(tr)) = repmat(float.tr(5,:,tr2ind(tr)),4,1);
 end
 
+% convert O2 units
+float.tr(:,:,tr2ind('O2')) = float.tr(:,:,tr2ind('O2')).*sw_dens0(float.S,float.T)./1e6;
 % Multiply by correction factor....
-tr(:,:,tr2ind('O2')) = O2fact.*tr(:,:,tr2ind('O2'));
+float.tr(:,:,tr2ind('O2')) = O2fact.*float.tr(:,:,tr2ind('O2'));
 
 yrstart = float.t(1,1);
 % decimal date of end of float data (pad one day)
 yrstop = float.t(1,end)+1/365;
+[float.zml float.iml] = calcmld(sw_dens0(float.S,float.T),z,dens_off);
+
+if Trestore == 1
+    Tobs = interp1(float.t(1,:),float.T',t)';
+end
+if Srestore == 1
+    Sobs = interp1(float.t(1,:),float.S',t)';
+end
 
 
 

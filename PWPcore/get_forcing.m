@@ -168,6 +168,7 @@ for yr = yr_rng(1):yr_rng(2)
     latint = interp1(dn_tyr,latyr,dntime,'linear',latmean);
     lonint = interp1(dn_tyr,lonyr,dntime,'linear',lonmean);
     for jj = 1:nt
+        try
         [~, ila] = min(abs(latslab-latint(jj)));
         [~, ilo] = min(abs(lonslab-lonint(jj)));
         
@@ -185,6 +186,9 @@ for yr = yr_rng(1):yr_rng(2)
         vStress(jj) = y_vflx(ilo,ila,jj);
         jjcurl = curl(X,Y,y_uflx(:,:,jj),y_vflx(:,:,jj));
         CURL(jj) = jjcurl(ilo,ila);
+        catch ME
+            continue
+        end
     end
     
     F.u10m = [F.u10m;u10m];

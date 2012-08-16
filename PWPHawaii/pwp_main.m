@@ -1,6 +1,6 @@
 % -------------------------------------------------------------------------
 %
-%  Set all optional model paramters here
+%  Set all optional model parameters here
 %
 %  nnnnn
 % -------------------------------------------------------------------------
@@ -25,9 +25,10 @@ addpath(core_path,0);
 
 %%% model currently running for bermuda...
 floatfile = 'Bermuda.mat';
+floatfile = '7622nHawaii.mat';
 % specify which tracers to include here
 %tracer_name = {'Ar','O2','O18','O17'};
-tracer_name = {'O2'};
+tracer_name = {'O2'};%,'NO3'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
 
@@ -40,12 +41,14 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 %  biology parameters
 % -------------------------------------------------------------------------
 pfract = 0;
-bioON_OFF = 1;  % biology on/off switch for o2 isotopes.  1 = biology on, 0 = biology off  
+bioON_OFF = 1;  % biology on/off switch for o2 and o2 isotopes.  1 = biology on, 0 = biology off 
+loadprod = 1;  % load NCP from file
+prodfile = 'inProd4.mat';
 
 oxyamp =  10;%5;  % amplitude of NCP (mol O2 m-2 y-1)
 oxycons= 18; % magnitude of biological consumption -- integrated
 c14_2_GPP = 2.7;  % set fixed GOP:NPP(14C) here
-O2fact = 1;  % scaling factor for float O2
+O2fact = 1.07;  % scaling factor for float O2
 
 % -------------------------------------------------------------------------
 %  wind/gas exchange paramters
@@ -79,6 +82,15 @@ EkmSaltConv = 1.75E-6;
 Kz = 8*1e-5;
 TracerDiffFactor = 1;
 Kt = TracerDiffFactor*Kz;
+
+% density offset for id of mixed layer in float data
+dens_off = 0.05;
+
+% restoring parameters
+Trestore = 1;
+tau_T = 30;
+Srestore = 1;
+tau_S = 30;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
