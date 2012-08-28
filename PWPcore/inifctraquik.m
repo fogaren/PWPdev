@@ -88,7 +88,7 @@ oldcurl = F.CURL;
 curl=filtfilt(b,a,F.CURL);    % and use a phase correcting implementation
 ekp=curl/rho_m/f;			% compute vert vel. (pos. down) from curl
 wv=interp1(F.DateTime,ekp,t,'linear');     % actual curl calculated
-nwmax=EkpMaxDep/dz;wvf=dt*[[nwmax:-1:1]/nwmax zeros(1,nz-nwmax)]'/dz;
+nwmax=min(EkpMaxDep,zmax)/dz;wvf=dt*[[nwmax:-1:1]/nwmax zeros(1,nz-nwmax)]'/dz;
 
 % -------------------------------------------------------------------------
 %		vertical attenuation of w, going to zero at base of seasonal layer
@@ -124,27 +124,35 @@ ResidualHeat = csaps(F.DateTime,TotHeat,LowPassFactor,F.DateTime);  % use lowpas
 %%%%% CHANGED HERE
 
 
-NetHeatOffset = EkmHeatConv- 0.*ResidualHeat;
-
 % actual net heat flux offset to make it sum to 0 over some time interval
 % the above is to compensate for the net heat imbalance in the NCEP
 % data for this locale partly compensated for ekman heat convergence
 % (associated with downwelling of warm surface water)
 rhf=-F.nSWRS*htfact; rhf=interp1(F.DateTime,rhf,t,'linear');
-thf=-(F.nLWRS + F.nLHTFL + F.nSHTFL)*htfact; thf=interp1(F.DateTime,thf,t,'linear');
-hhc=-interp1(F.DateTime,NetHeatOffset*htfact,t,'linear');
+thf=-(F.nLWRS + F.nLHTFL + F.nSHTFL - 0.*ResidualHeat)*htfact; 
+thf=interp1(F.DateTime,thf,t,'linear');
 slp=interp1(F.DateTime,F.PRES/atm_Pa,t,'linear');     % compute/interpolate sea level pressure pascals -> atmospheres
 % relative humidity in mm Hg?
 ph2o=F.RHUM/100.*Humidity(F.AIRT-273)/760; % compute partial pressure of water in atm
 ph2o=interp1(F.DateTime,ph2o,t,'linear'); 
 patmdry=slp-ph2o; % pressure of dry air in atm -- used in gasexhak
-vhec=zeros(zmax/dz,1);
-if VHEC ~= 0 
-    ndepvhec=100*VHEC/dz;
-    vhec(1:ndepvhec)=1;
-    hhc=hhc/ndepvhec;
-else
-    vhec(1)=1;
+
+try
+    load EkmHeatConvF.mat;
+    hhc = EkmHeatConv * hcapy * j2cal * dt;
+    % hhc=-interp1(F.DateTime,EkmHeatConv*htfact,t,'linear');
+    % Luo 2012.08.05, changed sign of hhc, so that positive EkmHeatConv
+    % represents net influx of lateral heat, and vice versa
+catch
+    hhc = zeros(size(z));
+    hhc_int = EkmHeatConv*htfact;
+    vhec=zeros(zmax/dz,1);
+    if VHEC ~= 0
+        ndepvhec=100*VHEC/dz;
+        hhc(1:ndepvhec)=hhc_int/ndepvhec;
+    else
+        hhc(1)=hhc_int;
+    end
 end
 %  ------------------------------------------------------------------------
 %  
@@ -177,9 +185,23 @@ hfactor=540 * 1000 / j2cal;	% converts watts to kg/s
 
 NetEminusPOffset=csaps(F.DateTime,F.PRATE-F.nLHTFL/hfactor,LowPassFactor,F.DateTime);		% balance salt
 % NetEminusPOffset=F.PRATE-F.nLHTFL/hfactor;		% balance salt
-FWFlux=FWfact * (F.PRATE - F.nLHTFL/hfactor - NetEminusPOffset - EkmSaltConv); 
+FWFlux=FWfact * (F.PRATE - F.nLHTFL/hfactor);% - NetEminusPOffset); 
 FWFlux=1-FWFlux/1000;			% convert to salinity multiplier (1 - kg/m^3)
 FWFlux=interp1(F.DateTime,FWFlux,t,'linear');		% recast onto time vector
+try
+    load EkmSaltConvF.mat;
+    hsc = EkmSaltConv * dt;
+% Luo 2012.08.04, Lateral salt flux distributed on a certain depth (VSEC) 
+catch
+    hsc = zeros(size(z));
+    hsc_int = FWfact * EkmSaltConv;
+    if VSEC ~= 0
+        ndepvsec=100*VSEC/dz;
+        hsc(1:ndepvsec)=hsc_int/ndepvsec;
+    else
+        hsc(1)=hsc_int;
+    end
+end
 
 % -------------------------------------------------------------------------
 %		compute the weight factors for FUDM advection
@@ -229,7 +251,11 @@ nlineret=0;
 
 
 
-
+% Luo: reinitialize some of storage variables to save computation time 
+Ta = zeros(length(z), floor(nt/tintv));
+Sa = Ta; Siga = Ta; 
+Ta(:,1) = T; Sa(:,1) = S; Siga(:,1) = Sig;
+iout = 1;
 
     
     

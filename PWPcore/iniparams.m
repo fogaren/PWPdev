@@ -17,18 +17,18 @@ R = 8.314;              % gas constant
 % Model parameters
 % -------------------------------------------------------------------------
 
-z = [1:2:1500]'; 
+z = [1:2:500]'; 
 nz = length(z);
 dz = 2;
-zmax = 1500; 
+zmax = 500; 
 
-% yrstart = 2009 + 143/366; % initial time, 05/23/2011 00:00 (retrieved from HOE-DYLAN1, 05/23/2012, 22:00)
-yrstart = 2007.1005;
-yrmax = 2012 + 273/366; % maximum end time, 09/30/2012 0000
+yrstart = 2012 + 143/366; % initial time, 05/23/2011 00:00 (retrieved from HOE-DYLAN1, 05/23/2012, 22:00)
+% yrstart = 2007.1005;
+yrmax = 2012. + 273/366; % maximum end time, 09/30/2012 0000
 % lat0 = 22.75;
 % lon0 = -158;
 % recording interval in # per day
-toutv = 1;
+toutv = 8;
 NumPerYear = 48; % screen output every # of recordings
 
 

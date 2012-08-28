@@ -19,9 +19,9 @@ T=zeros(nz,1); S=zeros(nz,1); UV=zeros(nz,2); epsUV=1e-8*ones(nz-1,1);
 
 
 
-% load alohainithydro % initialize profile from HOE-DYLAN1 
+load alohainithydro % initialize profile from HOE-DYLAN1 
 %                     %(assumably 05-23-2012 0000) 
-load alohainithydro2007Feb
+% load alohainithydro2007Feb
 tr=data;
 tr(1,5) = 0; % set shallowest depth to 0
 

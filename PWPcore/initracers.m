@@ -42,10 +42,10 @@ for igas = 1:ngas
         % Luo: do not know how to amende this part
         if floatON_OFF == 1
             Tracer(:,tr2ind(gas)) = sw_dens0(float.S(:,3),float.T(:,3)).*float.tr(:,3,tr2ind(gas))./1e6;
+            Tracer(499:end,tr2ind(gas)) = Tracer(498,tr2ind(gas));
         else
             Tracer(:,tr2ind(gas)) = sw_dens0(S,T).*(zeros(size(S))+0.1)./1e6;
         end
-        Tracer(499:end,tr2ind(gas)) = Tracer(498,tr2ind(gas));
         xG(igas) = gas_mole_fract(gas);
     else
         Tracer(:,tr2ind(gas)) = gasmoleq(S,T,gas);
@@ -58,7 +58,10 @@ end
 
 o2ind = tr2ind('O2');
 
-Tra = Tracer;
+% Tra = Tracer;
+% Luo: reinitialize some of storage variables to save computation time
+Tra = zeros(size(Tracer,1), size(Tracer,2), floor(nt/tintv));
+Tra(:,:,1) = Tracer(:,:);
 TotalOxy = dz*sum(Tracer((z<=TSOint_z),tr2ind('O2')))/TSOint_z;
 
 

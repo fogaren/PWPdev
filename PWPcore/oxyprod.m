@@ -25,6 +25,7 @@ if bioON_OFF == 1
         a36p = 1+D36p./1000;
     end
     
+    % Luo: messed up with O17 & O18?
     if ismember('O17',tracer_name)
         Tracer(:,o18ind) = Tracer(:,o18ind) + dOP.*a18p.*r18w + dOR.*a18r.*Tracer(:,o18ind)./Tracer(:,o2ind);
     end

@@ -8,7 +8,10 @@ if now == 0
     %	    fprintf('Kz = %8.3e, dt = %8.2f hr\n',Kz,dt/3600);
     %  	    fprintf('Month Tsurf Ssurf MLDepth  StIns  BRiN  GRiN\n');
     %  	  end
-    Ta=[Ta T]; Sa=[Sa S]; Siga=[Siga Sig]; ta=[ta t(it)]; 
+    iout = iout+1;
+%     Ta=[Ta T]; Sa=[Sa S]; Siga=[Siga Sig]; 
+    Ta(:,iout) = T; Sa(:,iout) = S; Siga(:,iout) = Sig; 
+    ta=[ta t(it)]; 
     TotalHeat=[TotalHeat dz*sum(T(z<=TSOint_z))/TSOint_z];
     TotalSalt = [TotalSalt dz*sum(S(z<=TSOint_z))/TSOint_z]; 
     TotalOxy = [TotalOxy dz*sum(Tracer(z<=TSOint_z,tr2ind('O2')))/TSOint_z];
@@ -29,7 +32,9 @@ if now == 0
     
     %
     %Anom = cat(3,Anom, anom); 
-    Tra=cat(3,Tra, Tracer);GPVO = [GPVO gpvo]; %Hel3=[Hel3 He3]; Tritium=[Tritium Trit]; %R18O = [R18O r18o]; R17O = [R17O r17o]; %O18 = [O18 o18]; O17 = [O17 o17]; 
+%     Tra=cat(3,Tra, Tracer);
+    Tra(:,:,iout) = Tracer(:,:);
+    GPVO = [GPVO gpvo]; %Hel3=[Hel3 He3]; Tritium=[Tritium Trit]; %R18O = [R18O r18o]; R17O = [R17O r17o]; %O18 = [O18 o18]; O17 = [O17 o17]; 
 %    Acflux=[Acflux acflux]; Apflux=[Apflux apflux]; Geflux=[Geflux geflux]; % diagnostics for ai part, ai comp, gas ex fluxes all in units of ncc/g (or ucc/g)
     Acflux=[Acflux acfluxcum]; Apflux=[Apflux apfluxcum]; Geflux=[Geflux gefluxcum]; % diagnostics for ai part, ai comp, gas ex fluxes all in units of ncc/g (or ucc/g)
     FluxNum=[FluxNum fluxcumnum];

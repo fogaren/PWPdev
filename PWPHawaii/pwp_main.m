@@ -18,6 +18,7 @@ ncep_path = 'D:\work\HOE_DYLAN\NCEP\Datasets\ncep.reanalysis';
 %
 % Path for core functions here
 addpath(core_path,0);
+addpath(lib_path,0);
 
 % -------------------------------------------------------------------------
 % Running Mode, No float data or Nudging with float data
@@ -48,7 +49,7 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 %  biology parameters
 % -------------------------------------------------------------------------
 pfract = 0;
-bioON_OFF = 1;  % biology on/off switch for o2 isotopes.  1 = biology on, 0 = biology off  
+bioON_OFF = 0;  % biology on/off switch for o2 isotopes.  1 = biology on, 0 = biology off  
 
 oxyamp =  10;%5;  % amplitude of NCP (mol O2 m-2 y-1)
 oxycons= 18; % magnitude of biological consumption -- integrated
@@ -76,15 +77,20 @@ zbscale=0.5; % scaling factor for depth of bubble penetration -- see inigasa for
 % -------------------------------------------------------------------------
 
 % Ekman heat transport (W/m2)
-EkmHeatConv = 12; %24; %-28;
+EkmHeatConv = 0; %12; %-28;
 % EkmHeatConv = 0;
 % Depth range of lateral heat flux (in 100's of meters)
-VHEC= 2; %0.5; %0.5;
-% Ekman salt convergence due to fresh water downward pumping
-EkmSaltConv = 1.75E-6;  
+VHEC= 0.5;
+% Ekman salt convergence (kg/m2/s)
+EkmSaltConv = 0; %-0.89E-6;
+% Depth range of lateral salt flux (in 100's of meters)
+VSEC= 2;
+% Restore Salinity (=1) or Not (=0)
+rstS_ON_OFF = 1;
+rstS_scale = 5; % Salinity restoring time scale in days
 
 % Vertical diffusivity (m2/s)
-Kz = 8*1e-5; %11*1e-5;
+Kz = 8e-5; %11*1e-5;
 TracerDiffFactor = 1;
 Kt = TracerDiffFactor*Kz;
 
@@ -113,8 +119,4 @@ end
 % -------------------------------------------------------------------------
 
  pwp;
- %modelout;
-
-
-
-
+ diagout;
