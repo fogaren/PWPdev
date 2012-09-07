@@ -23,7 +23,7 @@ if ismember(it,tprofind)
         % surfaces -- should minimize isopycnal heaving effects
         Tracer(dd,tr2ind(tr)) = interp1(fldens(dd),float.tr(dd,diven,tr2ind(tr)),Sig(dd),'linear','extrap');
         % nudge T and S to profile values
-        
+        Tracer(d,tr2ind(tr)) = float.tr(d,diven,tr2ind(tr));
     end
     
     %Tracer = squeeze(tr_float(:,:,diven));

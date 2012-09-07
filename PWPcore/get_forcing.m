@@ -25,6 +25,23 @@ lon(lon < 0) = lon(lon < 0) + 360;
 
 
 % initialize final output struct variables
+
+%		load the NCEP forcing (above) for the duration of the experiment
+%		at 6 hourly intervals, with the following variables input
+% 		from forcing.mat
+%			 DateTime       time 					years
+%			 LHTFL          latent heat flux 	watts/m^2
+%			 PRATE          precipitation			kg/m^2
+%			 PRES           sea level pressure	Pa
+%			 SHTFL          sensible heat flux	watts/m^2
+%			 nLWRS          net longwave radn	watts/m^2
+%			 nSWRS          net shortwave radn	watts/m^2
+%			 uStress        zonal stress			N/m^2
+%			 uWind          zonal wind				m/s
+%			 vStress        meridional stress	N/m^2
+%			 vWind          meridional wind		m/s
+%            CURL           wind stress curl   N/m^3
+
 F.u10m = [];
 F.v10m = [];
 F.nSWRS = [];
@@ -99,9 +116,7 @@ for yr = yr_rng(1):yr_rng(2)
     [~, min_25(2)] = min(abs(lat_rng(2)+pad-lat25));
     
     % initialize output vectors here
-    dv = datevec(dntime);
-    [~, yearfrac] = date2doy(dntime);
-    DateTime = dv(:,1)+yearfrac;
+    DateTime = dec_year(dntime);
     
     u10m = zeros(nt,1);
     v10m = zeros(nt,1);

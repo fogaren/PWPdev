@@ -11,10 +11,10 @@
 
 iniparams;
 %inihydrors97;
-inifloatdata;
-inihydrors;
-iniforcing;
-inifctraquik;               % Initialize useful factors                       
+inifloatdata;               % Initialize float data
+iniforcing;                 % Initialize NCEP forcing
+inifctraquik;               % Initialize useful factors
+inihydrors;                 % Initialize hydrography initial conditions                   
 inibio;                     % initialze biological parameters
 inio2isotopes;              % initialize oxygen isotope parameters  
 initracers;

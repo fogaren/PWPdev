@@ -1,57 +1,12 @@
 
 
 % -------------------------------------------------------------------------
-% Load wind forcing - QScat winds
+% define time grid
 % -------------------------------------------------------------------------
 
 
-%load HybridForcingQ.mat;  %% Qscat where available, otherwise NCEP
-
-
-% % -------------------------------------------------------------------------
-% % physical constants
-% % -------------------------------------------------------------------------
-% 
-% atm_Pa = 101325.0;      % atmospheric pressure in Pa
-% hcapy=1.e-6;			% heat capacity in deg/cal/m3
-% j2cal=0.23905;			% joules -> calories
-% tday = 60*60*24;        % seconds in a day
-% tyr = tday*365.25;      % seconds in a year
-% g = 9.807;              % grav. const. (m/s2)
-% rho_m = 1023;           % approx density
-% R = 8.314;              % gas constant
-
-% % -------------------------------------------------------------------------
-% % Model parameters
-% % -------------------------------------------------------------------------
-% 
-% dz = 2;
-% zmax = 1000;
-% BRiFac=g*dz/rho_m;		% factor for bulk Ri No Calculation
-% GRiFac=g*dz/rho_m;		% factor for Grad Ri No Calculation
-% BRiCrit=.65; GRiCrit=.25;	% critical values for overturning
-% TSOint_z = 600;         % z for depth integrated values
-
 ta = yrstart; mlt=zeros(5,5); mls=zeros(5,5); wct=zeros(5,5); wcs=zeros(5,5);
 EkpMaxDep = 550;
-
-%
-%		load the NCEP forcing (above) for the duration of the experiment
-%		at 6 hourly intervals, with the following variables input
-% 		from forcing.mat
-%			 DateTime       time 					years
-%			 LHTFL          latent heat flux 	watts/m^2
-%			 PRATE          precipitation			kg/m^2
-%			 PRES           sea level pressure	Pa
-%			 SHTFL          sensible heat flux	watts/m^2
-%			 nLWRS          net longwave radn	watts/m^2
-%			 nSWRS          net shortwave radn	watts/m^2
-%			 uStress        zonal stress			N/m^2
-%			 uWind          zonal wind				m/s
-%			 vStress        meridional stress	N/m^2
-%			 vWind          meridional wind		m/s
-%            CURL           wind stress curl   N/m^3
-%
 
 
 % calculated model parameters
@@ -228,7 +183,18 @@ nlineret=0;
 % -------------------------------------------------------------------------
 
 
-
+if Trestore == 1
+    for ii = 1:length(z)
+        d = ~isnan(float.T(ii,:));
+        Tobs(ii,:) = interp1(float.t(ii,d),float.T(ii,d),t)';
+    end
+end
+if Srestore == 1
+    for ii = 1:length(z)
+        d = ~isnan(float.S(ii,:));
+        Sobs(ii,:) = interp1(float.t(ii,d),float.S(ii,d),t)';
+    end
+end
 
 
     
