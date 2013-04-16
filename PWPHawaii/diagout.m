@@ -10,7 +10,7 @@ end
 
 maxz = 250;
 
-load 'D:\work\HOE_DYLAN\HOE_DYLAN_DATA\combine_OBS\HD_CTD.mat'
+load 'HD_CTD.mat'
 
 Tobs = Tobs(zobs<=maxz,:);
 Sobs = Sobs(zobs<=maxz,:);

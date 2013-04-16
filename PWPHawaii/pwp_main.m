@@ -32,8 +32,8 @@ floatON_OFF = 0; % floatON_OFF=0, No float data, fixed location
 % -------------------------------------------------------------------------
 
 %%% model currently running for bermuda...
-% floatfile = 'aloha.mat'; 
-floatfile = 'Bermuda.mat';
+floatfile = 'aloha.mat'; 
+% floatfile = 'Bermuda.mat';
 % specify which tracers to include here
 %tracer_name = {'Ar','O2','O18','O17'};
 tracer_name = {'O2'};
@@ -77,17 +77,19 @@ zbscale=0.5; % scaling factor for depth of bubble penetration -- see inigasa for
 % -------------------------------------------------------------------------
 
 % Ekman heat transport (W/m2)
-EkmHeatConv = 0; %12; %-28;
-% EkmHeatConv = 0;
+EkmHeatConv = 12; %12; %-28;
 % Depth range of lateral heat flux (in 100's of meters)
 VHEC= 0.5;
 % Ekman salt convergence (kg/m2/s)
 EkmSaltConv = 0; %-0.89E-6;
 % Depth range of lateral salt flux (in 100's of meters)
 VSEC= 2;
+% Restore Temperature (=1) or Not (=0)
+rstT_ON_OFF = 1;
+rstT_scale = 15; % Salinity restoring time scale in days
 % Restore Salinity (=1) or Not (=0)
 rstS_ON_OFF = 1;
-rstS_scale = 5; % Salinity restoring time scale in days
+rstS_scale = 15; % Salinity restoring time scale in days
 
 % Vertical diffusivity (m2/s)
 Kz = 8e-5; %11*1e-5;
@@ -119,4 +121,4 @@ end
 % -------------------------------------------------------------------------
 
  pwp;
- diagout;
+ diagout_big;

@@ -22,7 +22,7 @@ catch
         F = get_forcing(ncep_path,float.lat(5,:),float.lon(5,:),float.t(5,:));
         latitude = float.lat_mean;
     elseif floatON_OFF == 0
-        tseries = yrstart:0.05:yrmax;
+        tseries = yrstart:1/366/4:yrmax;
         latseries = tseries*0 + lat0;
         lonseries = tseries*0 + lon0;
         F = get_forcing(ncep_path, latseries, lonseries, tseries);
@@ -32,6 +32,7 @@ catch
 end
 
 % load salinity observations for restoring term
-if rstS_ON_OFF == 1
-    load HD_Sobs.mat
+if (rstS_ON_OFF == 1)||(rstT_ON_OFF == 1)
+    load HD_CTD.mat
+    Sig_obs = sw_dens0(Sobs, Tobs);
 end

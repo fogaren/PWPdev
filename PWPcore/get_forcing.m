@@ -77,7 +77,7 @@ for yr = yr_rng(1):yr_rng(2)
     
     % ncep time --> matlab datenumber
     % for some reason need to add a 48 hour offset....
-    dntime = datenum(1,1,1,time-48,0,0);
+    dntime = datenum(1,1,1)+(time-48)/24;
     
     % only select forcing up to last observation for final year..
     if yr  == yr_rng(2)

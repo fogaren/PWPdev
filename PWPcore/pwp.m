@@ -24,6 +24,7 @@ initracers;
 % -------------------------------------------------------------------------
 % Main time step loop
 % -------------------------------------------------------------------------
+rstT_state = 0;             % restoring temperature state: 1 == undergoing
 rstS_state = 0;             % restoring salinity state: 1 == undergoing
 for it=1:nt
     
@@ -38,11 +39,20 @@ for it=1:nt
         S=S+hsc;            % add horizontal eddy salt convergence
     end
     T=T+rhf(it)*dRdz;       % add radiant heat to profile
-    T=T+hhc;                % add horizontal eddy heat convergence
+    if rstT_ON_OFF == 1
+        restoreT;           % restoring temperature
+    end
+    if rstT_state == 0      % when rstT_ON_OFF is 0, rstS_state is always 0;
+                            % otherwise rstT_state will be set to 0 or 1 by
+                            % routine "restoreT"
+        T=T+hhc;            % add horizontal eddy heat convergence
+    end
     dogasheatcorr;          % maintain gas sat. when heat is added
     dostins;                % do static instability adjustment
     addmom;                 % add wind stress induced momentum
     dobrino;                % do bulk Ri No Adjustment
+    dolight;                % calculate light field; adjust light according
+                            % to observed isopycnal displacement
     oxyprod;                % add biological oxygen
     gasexchak;              % exchange gases
     dogrino;                % do gradient  Ri No Adjustment

@@ -17,7 +17,7 @@
 
 T=zeros(nz,1); S=zeros(nz,1); UV=zeros(nz,2); epsUV=1e-8*ones(nz-1,1);
 
-
+I = zeros(nz,1); Ia = I; % light
 
 load alohainithydro % initialize profile from HOE-DYLAN1 
 %                     %(assumably 05-23-2012 0000) 

@@ -155,8 +155,7 @@ catch
     end
 end
 
-% Surface Shortwave radiation interpolated
-SWR = interp1(F.DateTime,-F.nSWRS,t,'linear');
+% Surface Shortwave radiation interp
 %  ------------------------------------------------------------------------
 %  
 %		differential irradiance curve, and the
