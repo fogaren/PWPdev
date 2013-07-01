@@ -25,13 +25,14 @@ addpath(core_path,0);
 
 %%% model currently running for bermuda...
 
-floatfile = '7622nHawaii.mat';
-floatfile = '6401Hawaii.mat';
+floatfile = '7622Hawaii.mat';
+%floatfile = '6401Hawaii.mat';
 autostop = 0;
+% stop 30 days before present due to ncep forcing lag
 yrstop = dec_year(now-30);
 % specify which tracers to include here
-%tracer_name = {'Ar','O2','O18','O17'};
-tracer_name = {'O2','NO3'};
+tracer_name = {'Ar','O2','O18','O17'};
+%tracer_name = {'O2','NO3'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
 
@@ -51,7 +52,7 @@ prodfile = ['inProd_',floatfile];
 oxyamp =  10;%5;  % amplitude of NCP (mol O2 m-2 y-1)
 oxycons= 18; % magnitude of biological consumption -- integrated
 c14_2_GPP = 2.7;  % set fixed GOP:NPP(14C) here
-if strcmp(floatfile,'7622nHawaii.mat');
+if strcmp(floatfile,'7622Hawaii.mat');
     O2fact = 1.07;  % scaling factor for float O2
 elseif strcmp(floatfile,'6401Hawaii.mat');
     O2fact = 1.01;  % scaling factor for float O2
