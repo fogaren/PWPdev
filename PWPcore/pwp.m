@@ -10,13 +10,13 @@
 % -------------------------------------------------------------------------
 
 iniparams;
-%inihydrors97;
-inifloatdata;               % Initialize float data
-iniforcing;                 % Initialize NCEP forcing
+% inihydrors97;
+inihydrors_hawaii;
+inifloatdata;
+iniforcing;
 inifctraquik;               % Initialize useful factors
-inihydrors;                 % Initialize hydrography initial conditions                   
 inibio;                     % initialze biological parameters
-inio2isotopes;              % initialize oxygen isotope parameters  
+inio2isotopes;              % initialize oxygen isotope parameters
 initracers;
 
 
@@ -24,26 +24,31 @@ initracers;
 % -------------------------------------------------------------------------
 % Main time step loop
 % -------------------------------------------------------------------------
-
 for it=1:nt
-    
     T(1)=T(1)+thf(it);		% add sensible + latent heat flux
     S(1)=S(1)*FWFlux(it);   % alter salinity due to precip/evap
+    S=S+hsc;                % add horizontal eddy salt convergence
+    if rst_ON_OFF > 0
+        restoreS;           % restoring salinity
+    end
     T=T+rhf(it)*dRdz;       % add radiant heat to profile
-    T=T+hhc(it)*vhec;       % add horizontal eddy heat convergence
+    T=T+hhc;                % add horizontal eddy heat convergence
+    if rst_ON_OFF > 0
+        restoreT;           % restoring temperature
+    end
     dogasheatcorr;          % maintain gas sat. when heat is added
     dostins;                % do static instability adjustment
     addmom;                 % add wind stress induced momentum
     dobrino;                % do bulk Ri No Adjustment
-    oxyprod;                % add biological oxygen 
+    dolight;                % calculate light field; adjust light according
+                            % to observed isopycnal displacement
+    oxyprod;                % add biological oxygen
     gasexchak;              % exchange gases
     dogrino;                % do gradient  Ri No Adjustment
-    advdif;                 % advect and diffuse 
-    
-    %modelout;               % if time, save data 
-    rho_nudge;              % nudge tracers to float obs
-    restoreTS; 
+    advdif;                 % advect and diffuse
     dooutput;
+    if floatON_OFF == 1, modelout; end    % if time, save data
+    
 end
 
 %etime(clock,t0)/60

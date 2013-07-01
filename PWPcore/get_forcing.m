@@ -25,23 +25,6 @@ lon(lon < 0) = lon(lon < 0) + 360;
 
 
 % initialize final output struct variables
-
-%		load the NCEP forcing (above) for the duration of the experiment
-%		at 6 hourly intervals, with the following variables input
-% 		from forcing.mat
-%			 DateTime       time 					years
-%			 LHTFL          latent heat flux 	watts/m^2
-%			 PRATE          precipitation			kg/m^2
-%			 PRES           sea level pressure	Pa
-%			 SHTFL          sensible heat flux	watts/m^2
-%			 nLWRS          net longwave radn	watts/m^2
-%			 nSWRS          net shortwave radn	watts/m^2
-%			 uStress        zonal stress			N/m^2
-%			 uWind          zonal wind				m/s
-%			 vStress        meridional stress	N/m^2
-%			 vWind          meridional wind		m/s
-%            CURL           wind stress curl   N/m^3
-
 F.u10m = [];
 F.v10m = [];
 F.nSWRS = [];
@@ -62,7 +45,10 @@ for yr = yr_rng(1):yr_rng(2)
     
     latyr = lat(yrvec(:,1) == yr);
     lonyr = lon(yrvec(:,1) == yr);
-    dn_tyr = datenum(t(yrvec(:,1) == yr),1,1);
+%     dn_tyr = datenum(t(yrvec(:,1) == yr),1,1);
+    days_yr = datenum(yr+1,1,1) - datenum(yr,1,1);
+    t_yr = t(yrvec(:,1) == yr); 
+    dn_tyr = doy2date((t_yr - floor(t_yr)) * days_yr, floor(t_yr));
     % data domain for yr
     dn_trng = [min(dn_tyr) max(dn_tyr)];
     
@@ -75,11 +61,23 @@ for yr = yr_rng(1):yr_rng(2)
     srfpath = [ncep_path '/surface/'];
     
     % get time vector, ncep lat and lon grids
-    time = ncread([flxpath 'uwnd.10m.gauss' '.' num2str(yr) '.nc'],'time');
+    % Note: Different NCEP variables can be updated to different date
+    time = ncread([flxpath 'uwnd.10m.gauss' '.' num2str(yr) '.nc'],'time'); 
+    time = intersect(time,ncread([flxpath 'vwnd.10m.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'nswrs.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'nlwrs.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'shtfl.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'lhtfl.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'prate.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'uflx.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([flxpath 'vflx.sfc.gauss' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([srfpath 'rhum.sig995' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([srfpath 'air.sig995' '.' num2str(yr) '.nc'],'time')); 
+    time = intersect(time,ncread([srfpath 'slp' '.' num2str(yr) '.nc'],'time')); 
     
     % ncep time --> matlab datenumber
     % for some reason need to add a 48 hour offset....
-    dntime = datenum(1,1,1,time-48,0,0);
+    dntime = datenum(1,1,1)+(time-48)/24;
     
     % only select forcing up to last observation for final year..
     if yr  == yr_rng(2)
@@ -116,7 +114,9 @@ for yr = yr_rng(1):yr_rng(2)
     [~, min_25(2)] = min(abs(lat_rng(2)+pad-lat25));
     
     % initialize output vectors here
-    DateTime = dec_year(dntime);
+    dv = datevec(dntime);
+    [~, yearfrac] = date2doy(dntime);
+    DateTime = dv(:,1)+yearfrac;
     
     u10m = zeros(nt,1);
     v10m = zeros(nt,1);
@@ -183,7 +183,6 @@ for yr = yr_rng(1):yr_rng(2)
     latint = interp1(dn_tyr,latyr,dntime,'linear',latmean);
     lonint = interp1(dn_tyr,lonyr,dntime,'linear',lonmean);
     for jj = 1:nt
-        try
         [~, ila] = min(abs(latslab-latint(jj)));
         [~, ilo] = min(abs(lonslab-lonint(jj)));
         
@@ -201,9 +200,6 @@ for yr = yr_rng(1):yr_rng(2)
         vStress(jj) = y_vflx(ilo,ila,jj);
         jjcurl = curl(X,Y,y_uflx(:,:,jj),y_vflx(:,:,jj));
         CURL(jj) = jjcurl(ilo,ila);
-        catch ME
-            continue
-        end
     end
     
     F.u10m = [F.u10m;u10m];

@@ -4,13 +4,15 @@
 load([float_path '/' floatfile]);
 float_tracers = {'O2','NO3'};
 
+if floatON_OFF == 1
+
 activetr = intersect(float_tracers,tracer_name);
 nactive = length(activetr);
 
 [~,float.lon] = findprofile(data,z,find(strcmp('lon',data_header)));
-float.lon_mean = nanmean(float.lon(5,:));
+float.lon_mean = mean(float.lon(5,:));
 [~,float.lat] = findprofile(data,z,find(strcmp('lat',data_header)));
-float.lat_mean = nanmean(float.lat(5,:));
+float.lat_mean = mean(float.lat(5,:));
 [~,float.T] = findprofile(data,z,find(strcmp('T',data_header)));
 float.T(1:4,:) = repmat(float.T(5,:),4,1);
 [~,float.S] = findprofile(data,z,find(strcmp('S',data_header)));
@@ -27,21 +29,11 @@ for ii = 1:nactive
     float.tr(1:4,:,tr2ind(tr)) = repmat(float.tr(5,:,tr2ind(tr)),4,1);
 end
 
-% convert O2 units
-float.tr(:,:,tr2ind('O2')) = float.tr(:,:,tr2ind('O2')).*sw_dens0(float.S,float.T)./1e6;
 % Multiply by correction factor....
-float.tr(:,:,tr2ind('O2')) = O2fact.*float.tr(:,:,tr2ind('O2'));
+tr(:,:,tr2ind('O2')) = O2fact.*tr(:,:,tr2ind('O2'));
 
 yrstart = float.t(1,1);
 % decimal date of end of float data (pad one day)
-if autostop == 1
-    yrstop = float.t(1,end)+1/365;
+yrstop = float.t(1,end)+1/365;
+
 end
-[float.zml float.iml] = calcmld(sw_dens0(float.S,float.T),z,dens_off);
-
-
-
-
-
-
-

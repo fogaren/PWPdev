@@ -17,10 +17,24 @@ R = 8.314;              % gas constant
 % Model parameters
 % -------------------------------------------------------------------------
 
-z = [1:2:1000]';
-nz = length(z);
 dz = 2;
-zmax = 1000;
+zmax = 300; 
+z = (1:dz:zmax)'; 
+nz = length(z);
+
+dtmin = 3600;
+
+yrstart = 2012 + 143/366; % initial time, 05/23/2012 00:00 (retrieved from HOE-DYLAN1, 05/23/2012, 22:00)
+% yrstart = 2007.1005;
+yrmax = 2012.999; % maximum end time, 12/30/2012 0000
+% yrmax = 2012. + 273/366; % maximum end time, 09/30/2012 0000
+% lat0 = 22.75;
+% lon0 = -158;
+% recording interval in # per day
+toutv = 8;
+NumPerYear = 48; % screen output every # of recordings
+
+
 BRiFac=g*dz/rho_m;		% factor for bulk Ri No Calculation
 GRiFac=g*dz/rho_m;		% factor for Grad Ri No Calculation
 BRiCrit=.65; GRiCrit=.25;	% critical values for overturning

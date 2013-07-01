@@ -4,20 +4,15 @@
 %
 
 if bioON_OFF == 1  
-    if loadprod == 1
-        Prodt = Prodall(:,it);
-    else
-        Prodt = PofT(it)*Prod;
-    end
-    %Tracer(:,o2ind)=Tracer(:,o2ind)+PofT(it)*Prod;
-    Tracer(:,o2ind)=Tracer(:,o2ind)+Prodt;
+    
+    Tracer(:,o2ind)=Tracer(:,o2ind)+PofT(it)*Prod;
     %
     %DIC=DIC+PofT(it)*Prod*O2toC; % add biological flux to DIC pool based on redfield ratio
     
     % GPP in change in umol/kg per time-step
     dOP = GPP(:,it).*dt;
     % Respiration:  NOP = GOP + R
-    dOR = Prodt-dOP;
+    dOR = PofT(it)*Prod-dOP;
     
     % Do photosythesis + respiration time-step
     % dOP = photosythesis (+oxygen)
@@ -30,6 +25,7 @@ if bioON_OFF == 1
         a36p = 1+D36p./1000;
     end
     
+    % Luo: messed up with O17 & O18?
     if ismember('O17',tracer_name)
         Tracer(:,o18ind) = Tracer(:,o18ind) + dOP.*a18p.*r18w + dOR.*a18r.*Tracer(:,o18ind)./Tracer(:,o2ind);
     end
