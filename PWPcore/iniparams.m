@@ -1,4 +1,3 @@
-BRiCrit=.65; GRiCrit=.25;	% critical values for overturning
 % -------------------------------------------------------------------------
 % physical constants
 % -------------------------------------------------------------------------
@@ -18,6 +17,7 @@ R = 8.314;              % gas constant
 % Model parameters
 % -------------------------------------------------------------------------
 
+z = (1:dz:zmax)'; 
 nz = length(z);
 dtmin = 3600;
 
@@ -27,4 +27,5 @@ NumPerYear = 48; % screen output every # of recordings
 
 BRiFac=g*dz/rho_m;		% factor for bulk Ri No Calculation
 GRiFac=g*dz/rho_m;		% factor for Grad Ri No Calculation
+BRiCrit=.65; GRiCrit=.25;	% critical values for overturning
 TSOint_z = 600;         % z for depth integrated values
