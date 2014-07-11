@@ -5,10 +5,17 @@ if ismember(it,tprofind)
     Sold = S;
     Told = T;
     diven = find(tprofind == it);
+    if diven > 1469
+        debug = 1;
+    end
     for ii = 1:nactive
         tr = float_tracers{ii};
         d = find(~isnan(float.tr(:,diven,tr2ind(tr))));
-        Tracer(d,tr2ind(tr)) = float.tr(d,diven,tr2ind(tr));
+        try
+            Tracer(d,tr2ind(tr)) = float.tr(d,diven,tr2ind(tr));
+        catch
+            debug = 1
+        end
         % nudge T and S to profile values
         d = find(~isnan(float.T(:,diven)));
         T(d) = float.T(d,diven);

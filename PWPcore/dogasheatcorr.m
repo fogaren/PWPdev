@@ -3,7 +3,7 @@
 % gas is added to correct for lateral heat flux addition so that gas
 % saturation state and isotopic ratio is preserved for each gas
 
-Told=T-hhc(it)*vhec;
+Told=T-hhc;
 
 % correct gases to new temperature
 for igas=1:ngas 

@@ -16,8 +16,13 @@
 %				
 %
 if loadprod == 1
-    load(prodfile);
-    Prodall = dt.*interp1(tProd,Prod',t,'linear','extrap')';
+    if exist(prodfile,'file')
+        load(prodfile);
+        Prodall = dt.*interp1(tProd,Prod',t,'linear','extrap')';
+    else
+        Prodall = zeros(nz,nt);
+        Prod = zeros(nz,length(find(~isnan(tprofind)))-1);
+    end
 else
     z_scale = 76; % default is 76 meters
     %z_scale = 120;
