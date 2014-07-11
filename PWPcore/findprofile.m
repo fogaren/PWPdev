@@ -17,13 +17,9 @@ nz = length(zgrid);
 while 1
     tind = find(isnan(data(bind:end,zcol)),1,'first')+bind-2;
     divev(bind:tind) = diven;
-    
-    %interpret dive to dataout
-    %zprof = data(bind:tind,7);
-    %dive = data(bind:tind,:);
-    
-    %dvout = interp1(zprof,dive,zgrid);
-    %dataout((diven-1)*nz+1:diven*nz,:) = dvout;
+    if diven == 189
+        debug = 1;
+    end
     dvout = interp1(data(bind:tind,zcol),data(bind:tind,varcol),zgrid);
     dataout(:,diven) = dvout;
     
