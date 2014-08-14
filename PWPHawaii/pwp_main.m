@@ -1,6 +1,6 @@
 % -------------------------------------------------------------------------
 %
-%  Set all optional model parameters here
+%  Set all optional model paramters here
 %
 %  nnnnn
 % -------------------------------------------------------------------------
@@ -8,31 +8,63 @@
 % PWP paths
 
 % CHANGE pwp_root to point to where PWP is located on your local machine
-pwp_root = '/Users/Roo/Documents/';
-core_path = [pwp_root 'PWPdev/PWPcore'];
-lib_path = [pwp_root 'PWPdev/function_library'];
+pwp_root = '/Users/Roo/github/PWP/';
+core_path = [pwp_root 'PWPcore'];
+lib_path = [pwp_root 'function_library'];
 
 % CHANGE these to point to files where ncep and argo float data is located
-float_path = '/Users/Roo/Documents/ArgoPWP/Floatdata';
+float_path = [pwp_root 'floatdata'];
+glider_path = [pwp_root 'CMORE/HOE-DYLAN'];
 ncep_path = '/Users/Roo/Documents/MATLAB/Datasets/ncep.reanalysis';
 %
 % Path for core functions here
 addpath(core_path,0);
+addpath(lib_path,0);
+
+% -------------------------------------------------------------------------
+% Model run parameters - yrstart and yrstop set auto if not specified
+% -------------------------------------------------------------------------
+%yrstart = 2012 + 143/366; % initial time, 05/23/2012 00:00 (retrieved from HOE-DYLAN1, 05/23/2012, 22:00)
+yrstart = 2011;
+%yrmax = 2012.999; % maximum end time, 12/30/2012 0000
+yrstop = 2014.5;
+%yrmax = yrstop;
+% vertical grid params
+dz = 2;
+zmax = 1000; 
+% -------------------------------------------------------------------------
+% Running Mode, No float data or Nudging with float data
+% -------------------------------------------------------------------------
+floatON_OFF = 1; % floatON_OFF=0, No float data, fixed location 
+             % floatON_OFF=1, Nudging with float data, location determined by
+             % float data
+%floatON_OFF = 'glider';             
+
+% -------------------------------------------------------------------------
+% Isopycnal adjustment and light attenuation
+% -------------------------------------------------------------------------
+isoadjON_OFF = 0; % isoadjON_OFF = 1 for isopyncal adjustment for and 
+%                   light attuenuation calculations
 
 % -------------------------------------------------------------------------
 % list of tracers to be run
 % -------------------------------------------------------------------------
 
 %%% model currently running for bermuda...
-
-floatfile = '7622Hawaii.mat';
-%floatfile = '6401Hawaii.mat';
-autostop = 0;
-% stop 30 days before present due to ncep forcing lag
-yrstop = dec_year(now-30);
+%floatfile = '6401HawaiiQC.mat'; yrstart = 2010.9;
+%floatfile = '6403HawaiiQC.mat';
+floatfile = '6891HawaiiQC.mat';
+%floatfile = '7622HawaiiQC.mat'; 
+%floatfile = '7672HawaiiQC.mat';
+%floatfile = '8374HOTQC.mat';
+%floatfile = '8486HawaiiQC.mat';
+floatfile = '8497HawaiiQC.mat';
+gliderfile = 'sgUPall.mat';
+tracerInitFile = 'InitHoe2.mat';
+% floatfile = 'Bermuda.mat';
 % specify which tracers to include here
-tracer_name = {'Ar','O2','O18','O17'};
-%tracer_name = {'O2','NO3'};
+%tracer_name = {'Ar','O2','O18','O17'};
+tracer_name = {'O2'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
 
@@ -45,19 +77,32 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 %  biology parameters
 % -------------------------------------------------------------------------
 pfract = 0;
-bioON_OFF = 1;  % biology on/off switch for o2 and o2 isotopes.  1 = biology on, 0 = biology off 
+bioON_OFF = 0;  % biology on/off switch for o2 isotopes.  1 = biology on, 0 = biology off  
 loadprod = 1;  % load NCP from file
 prodfile = ['inProd_',floatfile];
-
-oxyamp =  10;%5;  % amplitude of NCP (mol O2 m-2 y-1)
-oxycons= 18; % magnitude of biological consumption -- integrated
+%oxyamp =  10;%5;  % amplitude of NCP (mol O2 m-2 y-1)
+%oxycons= 18; % magnitude of biological consumption -- integrated
 c14_2_GPP = 2.7;  % set fixed GOP:NPP(14C) here
-if strcmp(floatfile,'7622Hawaii.mat');
-    O2fact = 1.07;  % scaling factor for float O2
-elseif strcmp(floatfile,'6401Hawaii.mat');
-    O2fact = 1.01;  % scaling factor for float O2
+O2fact =1;
+if strcmpi(floatfile, '6403HawaiiQC.mat')
+    O2fact = 0.97;
+elseif strcmpi(floatfile, '6403HawaiiQCx.mat')
+    O2fact = 0.98;  % scaling factor for float O2
+elseif strcmpi(floatfile, '6401HawaiiQC.mat')
+    O2fact = 0.985;  % scaling factor for float O2
+elseif strcmpi(floatfile, '7622HawaiiQC.mat')
+    O2fact = 0.985;  % scaling factor for float O2
+elseif strcmpi(floatfile, '6891HawaiiQC.mat')
+    O2fact = 0.97;  % scaling factor for float O2
+elseif strcmpi(floatfile, '7672HawaiiQC.mat')
+    O2fact = 0.97;  % scaling factor for float O2
+elseif strcmpi(floatfile, '8374HOTQC.mat')
+    O2fact = 0.97;  % scaling factor for float O2   
+elseif strcmpi(floatfile, '8486HawaiiQC.mat')
+    O2fact = 0.97;  % scaling factor for float O2
+elseif strcmpi(floatfile, '8497HawaiiQC.mat')
+    O2fact = 0.96;  % scaling factor for float O2 
 end
-    
 
 % -------------------------------------------------------------------------
 %  wind/gas exchange paramters
@@ -65,7 +110,7 @@ end
 
 % power of piston velocity
 pvpower = 2; 
-LowPassFactor = 1E-5;
+LowPassFactor = 0.99999; %1E-5;
 
 % Air sea exchange magnitude factors
 gasexfact = 0.9332;         % relative to Wanninkof 1992
@@ -80,26 +125,26 @@ zbscale=0.5; % scaling factor for depth of bubble penetration -- see inigasa for
 % -------------------------------------------------------------------------
 
 % Ekman heat transport (W/m2)
-EkmHeatConv = 12;
-%EkmHeatConv = 0;
+EkmHeatConv = -20; %12; %12; %-28;
+EkmHeatConv = 0;
 % Depth range of lateral heat flux (in 100's of meters)
-VHEC= 2;
-% Ekman salt convergence due to fresh water downward pumping
-EkmSaltConv = 1.75E-6;  
+VHEC= 0.5;
+% Ekman salt convergence (kg/m2/s)
+EkmSaltConv = -1e-6; %-0.89E-6;
+EkmSaltConv = 0; 
+% Depth range of lateral salt flux (in 100's of meters)
+VSEC= 0.5;
+% Restore model temperature and temperature (=1 only CTD data; =2 only sea
+% glider data; =3 with Seaglider data fill gaps of CTD data) 
+% or Not restore (=0)
+rst_ON_OFF = 0;
+rstT_scale = 5; % Temperature restoring time scale in days
+rstS_scale = 5; % Salinity restoring time scale in days
 
 % Vertical diffusivity (m2/s)
-Kz = 8*1e-5;
+Kz = 8e-5; %11*1e-5;
 TracerDiffFactor = 1;
 Kt = TracerDiffFactor*Kz;
-
-% density offset for id of mixed layer in float data
-dens_off = 0.05;
-
-% restoring parameters
-Trestore = 1;
-tau_T = 30;
-Srestore = 1;
-tau_S = 30;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -107,6 +152,8 @@ tau_S = 30;
 % -------------------------------------------------------------------------
 % output storage arrays
 % -------------------------------------------------------------------------
+
+if floatON_OFF ~= 0
 
 outt = [];
 outS = [];
@@ -116,14 +163,26 @@ outdT = [];
 outTra = [];
 outD_Tra = [];
 outPV = [];
+outProd = [];
+
+end
 
 % -------------------------------------------------------------------------
 % run model
 % -------------------------------------------------------------------------
 
  pwp;
- %modelout;
-
-
-
-
+ %[Sigref, zSigref] = meanz2sig(Siga, z, 125);
+ 
+ if loadprod == 1
+     outdO2 = squeeze(outD_Tra(:,o2ind,2:end));
+     outdt = tyr.*repmat(diff(outt),nz,1);
+     Prod = Prod + outdO2./outdt;
+     tProd = (outt(:,1:end-1)+outt(:,2:end))./2;
+     save(prodfile,'tProd','Prod','outdt');
+     O2a = squeeze(Tra(:,1,:));
+     save([floatfile 'NCPdata.mat'],'ta','Ta','Sa','O2a','float');
+ end
+ %diagout_big;
+ 
+% diagout;

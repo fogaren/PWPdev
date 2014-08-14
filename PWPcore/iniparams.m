@@ -17,10 +17,14 @@ R = 8.314;              % gas constant
 % Model parameters
 % -------------------------------------------------------------------------
 
-z = [1:2:1000]';
+z = (1:dz:zmax)'; 
 nz = length(z);
-dz = 2;
-zmax = 1000;
+dtmin = 3600;
+
+toutv = 8;
+NumPerYear = 48; % screen output every # of recordings
+
+
 BRiFac=g*dz/rho_m;		% factor for bulk Ri No Calculation
 GRiFac=g*dz/rho_m;		% factor for Grad Ri No Calculation
 BRiCrit=.65; GRiCrit=.25;	% critical values for overturning
