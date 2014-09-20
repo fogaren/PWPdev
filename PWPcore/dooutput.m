@@ -12,7 +12,7 @@ if now == 0
 %     Ta=[Ta T]; Sa=[Sa S]; Siga=[Siga Sig]; 
     Ta(:,iout) = T; Sa(:,iout) = S; Siga(:,iout) = Sig; 
     ta=[ta t(it)]; 
-    Ia(:,iout) = I; z_adja(:,iout) = z_adj;
+    %Ia(:,iout) = I; z_adja(:,iout) = z_adj;
     TotalHeat=[TotalHeat dz*sum(T(z<=TSOint_z))/TSOint_z];
     TotalSalt = [TotalSalt dz*sum(S(z<=TSOint_z))/TSOint_z]; 
     TotalOxy = [TotalOxy dz*sum(Tracer(z<=TSOint_z,tr2ind('O2')))/TSOint_z];
@@ -20,7 +20,8 @@ if now == 0
     tml = [tml T(1)]; sml = [sml S(1)];
     nbri=nbri/noften; ngri=ngri/noften; nstin=nstin/noften;
     nnbri=[nnbri nbri]; nngri=[nngri ngri]; nnstin=[nnstin nstin];
-    zmld=[zmld dz*mld]; zmld2 = [zmld2 dz*mld_sig(Sig)];
+    zmld=[zmld dz*mld]; 
+    %zmld2 = [zmld2 dz*mld_sig(Sig)];
     
     
     nclock=nclock + 1;

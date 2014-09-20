@@ -13,7 +13,7 @@ if ismember(it,tprofind)
     for ii = 1:nactive
         tr = float_tracers{ii};
         d = find(~isnan(float.tr(:,diven,tr2ind(tr))));
-        fldens = sw_dens0(float.S(:,diven),float.T(:,diven));
+        fldens = gsw_sigma0(float.S(:,diven),float.T(:,diven));
         % identify mixed layer and thermolcine portion of profiles
         dml = find(d <= mld);
         dd = find(d > mld);

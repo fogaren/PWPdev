@@ -5,9 +5,6 @@ if ismember(it,tprofind)
     Sold = S;
     Told = T;
     diven = find(tprofind == it);
-    if diven > 1469
-        debug = 1;
-    end
     for ii = 1:nactive
         tr = float_tracers{ii};
         d = find(~isnan(float.tr(:,diven,tr2ind(tr))));

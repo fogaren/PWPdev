@@ -11,12 +11,14 @@
 
 iniparams;
 % inihydrors97;
-inihydrors_hawaii;
 inifloatdata;
+inihydrors;
 iniforcing;
 inifctraquik;               % Initialize useful factors
 inibio;                     % initialze biological parameters
-inio2isotopes;              % initialize oxygen isotope parameters
+if ismember(tracer_name,'O18')
+    inio2isotopes;          % initialize oxygen isotope parameters
+end
 initracers;
 
 
@@ -48,7 +50,8 @@ for it=1:nt
     dogrino;                % do gradient  Ri No Adjustment
     advdif;                 % advect and diffuse
     if floatON_OFF ~= 0 
-        modelout; 
+        %modelout; 
+        rho_nudge;
     end                     % if time, save data
     dooutput;
     

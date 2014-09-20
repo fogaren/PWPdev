@@ -24,6 +24,7 @@ if floatON_OFF == 1
     [~,float.t] = findprofile(data,z,find(strcmp('yrdate',data_header)));
     float.t = nanmean(float.t,1);
     %float.t(1:4,:) = repmat(float.t(5,:),4,1);
+    [float.zml, float.iml] = calcmld(gsw_sigma0(float.S,float.T),z,0.125);
     
     ndives = size(float.T,2);
     float.tr = zeros(nz,ndives,ntracers);

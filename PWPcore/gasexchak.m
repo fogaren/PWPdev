@@ -33,14 +33,16 @@ end
 % cap17O2_eq:  Equilibrium cap17O as a function of temperature from Luz
 % (2009 (in press))
 %
-cap17eq = T(1).*0.6+1.8;
-
-% set equilibrium fractionation to equal cap17eq
-a18ge = 1+(-0.730 + 427./(T(1)+273.15))./1000;  % from Benson and Kraus (1980)
-a17ge = a18ge.^lambda.* (cap17eq./1e6+1);
-a36ge = a18ge.^2;
-a35ge = a18ge*a17ge;
-
+if exist('lambda','var')
+    
+    cap17eq = T(1).*0.6+1.8;
+    
+    % set equilibrium fractionation to equal cap17eq
+    a18ge = 1+(-0.730 + 427./(T(1)+273.15))./1000;  % from Benson and Kraus (1980)
+    a17ge = a18ge.^lambda.* (cap17eq./1e6+1);
+    a36ge = a18ge.^2;
+    a35ge = a18ge*a17ge;
+end
 
 % includes contribution of windspeed, patm, and T
 ai=wfact.*patmdry(it)*atm_Pa/(R*(273.15+T(1)));
