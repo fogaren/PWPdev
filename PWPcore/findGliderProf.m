@@ -6,7 +6,12 @@ zcol = strcmpi('z',data_header);
 sgcol = strcmpi('glidernum',data_header);
 dvcol = strcmpi('divenum',data_header);
 varcol = strcmpi(varstr,data_header);
-diven = 1e4.*data(:,sgcol)+data(:,dvcol);
+% if sg number is not specified, just use dive number to id
+if sum(sgcol) == 0
+    diven = data(:,dvcol);
+else
+    diven = 1e4.*data(:,sgcol)+data(:,dvcol);
+end
 dives = unique(diven);
 
 nz = length(find(diven == dives(1)));

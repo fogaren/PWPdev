@@ -46,7 +46,8 @@ for it=1:nt
         dolight;                % calculate light field; adjust light according
     end                        % to observed isopycnal displacement
     oxyprod;                % add biological oxygen
-    gasexchak;              % exchange gases
+    %gasexchak;              % exchange gases
+    dogasex;
     dogrino;                % do gradient  Ri No Adjustment
     advdif;                 % advect and diffuse
     if floatON_OFF ~= 0 

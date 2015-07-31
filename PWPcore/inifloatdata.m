@@ -1,5 +1,5 @@
 
-%function [float yrstart yrstop] = inifloatdata(floatfile)
+%function [float startday stopday] = inifloatdata(floatfile)
 
 
 
@@ -40,33 +40,35 @@ if floatON_OFF == 1
     % Multiply by correction factor....
     float.tr(:,:,tr2ind('O2')) = O2fact.*float.tr(:,:,tr2ind('O2'));
     
-    if(~exist('yrstart'))
-        yrstart = float.t(1,1);
+    if(~exist('startday','var'))
+        startday = float.t(1,1);
     end
     % decimal date of end of float data (pad one day)
-    if(~exist('yrstop'))
-        yrstop = float.t(1,end)+1/365;
+    if(~exist('stopday','var'))
+        %stopday = float.t(1,end)+1/365;
+        % t in days
+        stopday = float.t(1,end)+1;
     end
     % seaglider data - need to sort by date - need to deal with Nan below
     % 200m
 elseif strcmpi(floatON_OFF,'glider')
     load([glider_path '/' gliderfile]);
     it = find(strcmp('dectime',data_header));
-    %U = sortrows(U,it);
+    %U = sortrows(UP,it);
     float_tracers = {'O2'};
     activetr = intersect(float_tracers,tracer_name);
     nactive = length(activetr);
-    [float.lon] = findGliderProf(U,z,'lon',data_header);
+    [float.lon] = findGliderProf(UP,z,'lon',data_header);
     float.lon = nanmean(float.lon,1);
     float.lon_mean = nanmean(float.lon);
-    [float.lat] = findGliderProf(U,z,'lat',data_header);
+    [float.lat] = findGliderProf(UP,z,'lat',data_header);
     float.lat = nanmean(float.lat,1);
     float.lat_mean = nanmean(float.lat);
-    [float.T] = findGliderProf(U,z,'tempc',data_header);
+    [float.T] = findGliderProf(UP,z,'tempc',data_header);
     float.T(1:4,:) = repmat(float.T(5,:),4,1);
-    [float.S] = findGliderProf(U,z,'salin',data_header);
+    [float.S] = findGliderProf(UP,z,'salin',data_header);
     float.S(1:4,:) = repmat(float.S(5,:),4,1);
-    [float.t] = findGliderProf(U,z,'dectime',data_header);
+    [float.t] = findGliderProf(UP,z,'dectime',data_header);
     float.t = nanmean(float.t,1);
     %float.t(1:4,:) = repmat(float.t(5,:),4,1);
     
@@ -81,7 +83,7 @@ elseif strcmpi(floatON_OFF,'glider')
             trstr = tr;
             trScaleFac = 1;
         end
-        [float.tr(:,:,tr2ind(tr))] = trScaleFac.*findGliderProf(U,z,trstr,data_header);
+        [float.tr(:,:,tr2ind(tr))] = trScaleFac.*findGliderProf(UP,z,trstr,data_header);
         % no float data from top 4 meters -- replace with 5 m data
         float.tr(1:4,:,tr2ind(tr)) = repmat(float.tr(5,:,tr2ind(tr)),4,1);
     end

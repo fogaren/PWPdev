@@ -32,7 +32,7 @@
 % BRiCrit=.65; GRiCrit=.25;	% critical values for overturning
 % TSOint_z = 600;         % z for depth integrated values
 
-ta = yrstart; mlt=zeros(5,5); mls=zeros(5,5); wct=zeros(5,5); wcs=zeros(5,5);
+ta = startday; mlt=zeros(5,5); mls=zeros(5,5); wct=zeros(5,5); wcs=zeros(5,5);
 EkpMaxDep = 550;
 
 %
@@ -55,15 +55,15 @@ EkpMaxDep = 550;
 
 
 % calculated model parameters
-nyrs = yrstop - yrstart;
+nyrs = stopday - startday;
 dt=min([0.4*dz*dz/max(Kz) 0.4*dz*dz/max(Kt) dtmin]);	% time step must resolve diurnal scales (dt < 6 hours)
 z=[dz/2:dz:zmax-dz/2]'; nz=length(z); zp=[0:dz:zmax];	% useful depth vectors
 tmax=nyrs*tyr; nt=nyrs*tyr/dt;                  % time constants
 treport = tyr;  nreport = treport/dt;           % report once a year
 
-t = yrstart:(dt./tyr):yrstop;
+t = startday:(dt./tyr):stopday;
 nt = length(t);
-%t=[1:nt]*dt/tyr + yrstart; tpf=2*pi*t/tyr;		% time vector, etc.
+%t=[1:nt]*dt/tyr + startday; tpf=2*pi*t/tyr;		% time vector, etc.
 % recording time interval: convert to number of time steps
 tintv=round(tday./(dt.*toutv));	
 

@@ -6,15 +6,15 @@ function [zmld, iml] = calcmld(dens,z,dens_off)
 t = size(dens,2);
 zmld = zeros(t,1);
 iml = zeros(t,1);
-for i = 1:t
-    dens0 = dens(find(~isnan(dens(:,i)),1,'first'),i);
-    ml = find(dens(:,i) -dens0 > dens_off,1,'first');
+for ii = 1:t
+    dens0 = dens(find(~isnan(dens(:,ii)),1,'first'),ii);
     try
-        zmld(i) = z(ml);
-        iml(i) = ml;
+        ml = find(dens(:,ii) -dens0 > dens_off,1,'first');
+        zmld(ii) = z(ml);
+        iml(ii) = ml;
     catch
-        zmld(i) = z(end);
-        iml(i) = length(z);
+        zmld(ii) = z(end);
+        iml(ii) = length(z);
     end
 end
     

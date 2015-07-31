@@ -30,7 +30,7 @@ zmld = float.zml(1); mld=float.iml(1);
 %Sig=Sigref+Alpha*(T-Tref)+Beta*(S-Sref);	% compute density
 Sig = sw_dens0(S,T);
 % initialize storage variables
-Ta=T; Sa=S; Siga=Sig; UVa=UV;  tml=T(1); sml=S(1);%ta=yrstart;
+Ta=T; Sa=S; Siga=Sig; UVa=UV;  tml=T(1); sml=S(1);
 TotalHeat = dz*sum(T(z<=TSOint_z))/TSOint_z;
 TotalSalt = dz*sum(S(z<=TSOint_z))/TSOint_z;
 

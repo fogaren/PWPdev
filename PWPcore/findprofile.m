@@ -17,10 +17,10 @@ nz = length(zgrid);
 while 1
     tind = find(isnan(data(bind:end,zcol)),1,'first')+bind-2;
     divev(bind:tind) = diven;
-    if diven == 189
-        debug = 1;
-    end
-    dvout = interp1(data(bind:tind,zcol),data(bind:tind,varcol),zgrid);
+%     if diven == 189
+%         debug = 1;
+%     end
+    dvout = naninterp1(data(bind:tind,zcol),data(bind:tind,varcol),zgrid);
     dataout(:,diven) = dvout;
     
     % find start of next prof
@@ -30,7 +30,20 @@ while 1
     end
     diven = diven + 1;
 end
-
-
+end
+function [out] = naninterp1(x, Y, xi)
+    MIN_DATA_POINTS = 5;
+    szY = size(Y);
+    out = nan(length(xi),szY(2));
+    for ii = 1:szY(2)
+        gd = ~isnan(Y(:,ii));
+        % at least two points needed to interpolate
+        if sum(gd) >= MIN_DATA_POINTS
+            out(:,ii) = interp1(x(gd),Y(gd,ii),xi);
+        else
+            out(:,ii) = nan.*xi;
+        end
+    end
+end
 
     

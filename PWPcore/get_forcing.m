@@ -18,7 +18,8 @@
 function [F] = get_forcing(ncep_path,lat,lon,t)
 
 % define study domain
-yrvec = datevec(datenum(t,1,1));
+%yrvec = datevec(datenum(t,1,1));
+yrvec = datevec(t);
 yr_rng = [yrvec(1,1) yrvec(end,1)];
 % make all longitudes positive
 lon(lon < 0) = lon(lon < 0) + 360;
@@ -46,11 +47,11 @@ for yr = yr_rng(1):yr_rng(2)
     
     latyr = lat(yrvec(:,1) == yr);
     lonyr = lon(yrvec(:,1) == yr);
-%     dn_tyr = datenum(t(yrvec(:,1) == yr),1,1);
-    days_yr = datenum(yr+1,1,1) - datenum(yr,1,1);
-    t_yr = t(yrvec(:,1) == yr); 
-    %dn_tyr = doy2date((t_yr - floor(t_yr)) * days_yr, floor(t_yr));
-    dn_tyr = datenum(t_yr,1,1);
+
+    %t_yr = t(yrvec(:,1) == yr); 
+
+    dn_tyr = t;%datenum(t_yr,1,1);
+    %dn_tyr = datenum(t_yr,1,1);
     % data domain for yr
     dn_trng = [min(dn_tyr) max(dn_tyr)];
     
@@ -80,7 +81,7 @@ for yr = yr_rng(1):yr_rng(2)
     % ncep time --> matlab datenumber
     % for some reason need to add a 48 hour offset....
     dntime = datenum(1,1,1)+(time-48)/24;
-    
+    dntime = datenum(1800,1,1)+(time-48)/24;
     % only select forcing up to last observation for final year..
     if yr  == yr_rng(2)
         dntime = dntime(dntime <= dn_trng(2));
@@ -116,9 +117,9 @@ for yr = yr_rng(1):yr_rng(2)
     [~, min_25(2)] = min(abs(lat_rng(2)+pad-lat25));
     
     % initialize output vectors here
-    dv = datevec(dntime);
-    [~, yearfrac] = date2doy(dntime);
-    DateTime = dec_year(dntime);
+    %dv = datevec(dntime);
+    %[~, yearfrac] = date2doy(dntime);
+    DateTime = dntime;%dec_year(dntime);
     
     u10m = zeros(nt,1);
     v10m = zeros(nt,1);
@@ -157,6 +158,7 @@ for yr = yr_rng(1):yr_rng(2)
     y_uflx = ncread([flxpath 'uflx.sfc.gauss' '.' num2str(yr) '.nc'], 'uflx',min_T62,n_ind,[1 1 1]);
     y_vflx = ncread([flxpath 'vflx.sfc.gauss' '.' num2str(yr) '.nc'], 'vflx',min_T62,n_ind,[1 1 1]);
     % load surface ncep variables
+    n_ind = max_25-min_25+1;
     y_rhum = ncread([srfpath 'rhum.sig995' '.' num2str(yr) '.nc'], 'rhum',min_25,n_ind,[1 1 1]);
     y_air = ncread([srfpath 'air.sig995' '.' num2str(yr) '.nc'], 'air',min_25,n_ind,[1 1 1]);
     y_slp = ncread([srfpath 'slp' '.' num2str(yr) '.nc'], 'slp',min_25,n_ind,[1 1 1]);

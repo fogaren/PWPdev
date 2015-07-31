@@ -31,7 +31,7 @@
 
 function [sol] = gasmoleq(S,T,gas)
 
-rho = sw_dens0(S,T);
+rho = gsw_sigma0(S,T)+1000;
 if strcmpi(gas, 'He')
     gasmolsol = Hesol(S,T);
 elseif strcmpi(gas, 'Ne')

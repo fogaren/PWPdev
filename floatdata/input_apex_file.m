@@ -24,19 +24,19 @@ T.Var8 = [];
 sp = {' '};
 dstr = strcat(T{:,4},sp,T{:,5});
 
-dn = datenum(dstr);
-dv = datevec(dn);
-dec_yr = dec_year(dn);
+daten = datenum(dstr);
+dv = datevec(daten);
+%daten = dec_year(dn);
 
 
 % create data matrix and replace 1st columns w/ date info
 ncols = ninfo_cols+2.*ndata_cols;
-data = zeros(length(dn),ncols);
-data(:,1) = dec_yr;
+data = zeros(length(daten),ncols);
+data(:,1) = daten;
 data(:,2) = dv(:,2);
 data(:,3) = dv(:,3);
 data(:,4) = dv(:,1);
-data(:,5) = rem(dn,1);
+data(:,5) = rem(daten,1);
 
 load('data_header.mat');
 %data_header(1,1:5) = {'year date','month','day','year','decimal day'};

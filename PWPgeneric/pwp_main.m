@@ -49,9 +49,6 @@ isoadjON_OFF = 0; % isoadjON_OFF = 1 for isopyncal adjustment for and
 % -------------------------------------------------------------------------
 
 %%%
-floatfile = '7601StnPQC.mat';
-%floatfile = '6403HawaiiQC.mat';
-floatfile = '6968SoOcnQC.mat';
 floatfile = '0069BermudaQC.mat';
 
 % specify which tracers to include here

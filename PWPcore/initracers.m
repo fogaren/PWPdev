@@ -44,7 +44,10 @@ for igas = 1:ngas
     elseif ismember(gas,float_tracers)
         % Luo: do not know how to amende this part
         if floatON_OFF == 1 
-            Tracer(:,tr2ind(gas)) = sw_dens0(float.S(:,3),float.T(:,3)).*float.tr(:,3,tr2ind(gas))./1e6;
+            %Tracer(:,tr2ind(gas)) = sw_dens0(float.S(:,3),float.T(:,3)).*float.tr(:,3,tr2ind(gas))./1e6;
+            % initializes with 3rd dives because often first dive or two
+            % are shallow and will not initialize entire water column
+            Tracer(:,tr2ind(gas)) = float.tr(:,3,tr2ind(gas));
             %Tracer(499:end,tr2ind(gas)) = Tracer(498,tr2ind(gas));
         elseif strcmpi(floatON_OFF,'glider')
             load([glider_path '/' tracerInitFile]);
