@@ -19,8 +19,8 @@ function [F] = get_forcing(ncep_path,lat,lon,t)
 
 % define study domain
 %yrvec = datevec(datenum(t,1,1));
-yrvec = datevec(t);
-yr_rng = [yrvec(1,1) yrvec(end,1)];
+datenVec = datevec(t);
+yrRng = [datenVec(1,1) datenVec(end,1)];
 % make all longitudes positive
 lon(lon < 0) = lon(lon < 0) + 360;
 lat(isnan(lat)) = interp1(t(~isnan(lat)),lat(~isnan(lat)),t(isnan(lat)));
@@ -43,10 +43,10 @@ F.CURL = [];
 F.DateTime = [];
 
 % get forcing for each single year and then concatenate
-for yr = yr_rng(1):yr_rng(2)
+for yr = yrRng(1):yrRng(2)
     
-    latyr = lat(yrvec(:,1) == yr);
-    lonyr = lon(yrvec(:,1) == yr);
+    latyr = lat(datenVec(:,1) == yr);
+    lonyr = lon(datenVec(:,1) == yr);
 
     %t_yr = t(yrvec(:,1) == yr); 
 
@@ -80,10 +80,14 @@ for yr = yr_rng(1):yr_rng(2)
     
     % ncep time --> matlab datenumber
     % for some reason need to add a 48 hour offset....
-    dntime = datenum(1,1,1)+(time-48)/24;
-    dntime = datenum(1800,1,1)+(time-48)/24;
+    % some dates are referenced to yr 0, some to 1800?
+    if time(1) > 1e7
+        dntime = datenum(1,1,1)+(time-48)/24;
+    else
+        dntime = datenum(1800,1,1)+time/24;
+    end
     % only select forcing up to last observation for final year..
-    if yr  == yr_rng(2)
+    if yr  == yrRng(2)
         dntime = dntime(dntime <= dn_trng(2));
     end
     
@@ -157,7 +161,11 @@ for yr = yr_rng(1):yr_rng(2)
     y_prate = ncread([flxpath 'prate.sfc.gauss' '.' num2str(yr) '.nc'], 'prate',min_T62,n_ind,[1 1 1]);
     y_uflx = ncread([flxpath 'uflx.sfc.gauss' '.' num2str(yr) '.nc'], 'uflx',min_T62,n_ind,[1 1 1]);
     y_vflx = ncread([flxpath 'vflx.sfc.gauss' '.' num2str(yr) '.nc'], 'vflx',min_T62,n_ind,[1 1 1]);
+    
+    
     % load surface ncep variables
+    lonslab_25 = ncread([srfpath 'slp.' num2str(yr) '.nc'], 'lon',min_25(1),1+max_25(1)-min_25(1),1);
+    latslab_25 = ncread([srfpath 'slp.' num2str(yr) '.nc'], 'lat',min_25(2),1+max_25(2)-min_25(2),1);
     n_ind = max_25-min_25+1;
     y_rhum = ncread([srfpath 'rhum.sig995' '.' num2str(yr) '.nc'], 'rhum',min_25,n_ind,[1 1 1]);
     y_air = ncread([srfpath 'air.sig995' '.' num2str(yr) '.nc'], 'air',min_25,n_ind,[1 1 1]);
@@ -184,12 +192,13 @@ for yr = yr_rng(1):yr_rng(2)
     
     %%%!!! need to grab fenceposts from previous and following year for smooth interpolation....
     
-    latint = interp1(dn_tyr,latyr,dntime,'linear',latmean);
-    lonint = interp1(dn_tyr,lonyr,dntime,'linear',lonmean);
+    latint = interp1(t,lat,dntime,'linear',latmean);
+    lonint = interp1(t,lon,dntime,'linear',lonmean);
     for jj = 1:nt
         [~, ila] = min(abs(latslab-latint(jj)));
         [~, ilo] = min(abs(lonslab-lonint(jj)));
-        
+        [~, ila25] = min(abs(latslab_25-latint(jj)));
+        [~, ilo25] = min(abs(lonslab_25-lonint(jj)));
         u10m(jj) = y_u10m(ilo,ila,jj);
         v10m(jj) = y_v10m(ilo,ila,jj);
         nSWRS(jj) = y_nswrs(ilo,ila,jj);
@@ -197,13 +206,13 @@ for yr = yr_rng(1):yr_rng(2)
         nSHTFL(jj) = y_shtfl(ilo,ila,jj);
         nLHTFL(jj) = y_lhtfl(ilo,ila,jj);
         PRATE(jj) = y_prate(ilo,ila,jj);
-        PRES(jj) = y_slp(ilo,ila,jj);
-        RHUM(jj) = y_rhum(ilo,ila,jj);
-        AIRT(jj) = y_air(ilo,ila,jj);
         uStress(jj) = y_uflx(ilo,ila,jj);
         vStress(jj) = y_vflx(ilo,ila,jj);
         jjcurl = curl(X,Y,y_uflx(:,:,jj),y_vflx(:,:,jj));
         CURL(jj) = jjcurl(ilo,ila);
+        PRES(jj) = y_slp(ilo25,ila25,jj);
+        RHUM(jj) = y_rhum(ilo25,ila25,jj);
+        AIRT(jj) = y_air(ilo25,ila25,jj);
     end
     
     F.u10m = [F.u10m;u10m];

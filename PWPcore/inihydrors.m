@@ -15,7 +15,8 @@
 % Set initial temperature and salinity profiles
 % -------------------------------------------------------------------------
 
-T=zeros(nz,1); S=zeros(nz,1); UV=zeros(nz,2); epsUV=1e-8*ones(nz-1,1);
+%T=zeros(nz,1); S=zeros(nz,1); 
+UV=zeros(nz,2); epsUV=1e-8*ones(nz-1,1);
 
 
 d = find(~isnan(float.T(:,1)));
@@ -28,7 +29,7 @@ TB=T(end); SB=S(end);
 zmld = float.zml(1); mld=float.iml(1);
 
 %Sig=Sigref+Alpha*(T-Tref)+Beta*(S-Sref);	% compute density
-Sig = sw_dens0(S,T);
+Sig = gsw_sigma0(S,T);
 % initialize storage variables
 Ta=T; Sa=S; Siga=Sig; UVa=UV;  tml=T(1); sml=S(1);
 TotalHeat = dz*sum(T(z<=TSOint_z))/TSOint_z;

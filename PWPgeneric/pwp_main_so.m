@@ -26,10 +26,10 @@ addpath(lib_path,0);
 % -------------------------------------------------------------------------
 
 %yrmax = 2012.999; % maximum end time, 12/30/2012 0000
-%yrstart = 2010.9;
+%startday = datenum(2012,10,3);
 %yrstop = 2014.9;
 dz = 2;
-zmax = 1000; 
+zmax = 600; 
 % -------------------------------------------------------------------------
 % Running Mode, No float data or Nudging with float data
 % -------------------------------------------------------------------------
@@ -49,11 +49,14 @@ isoadjON_OFF = 0; % isoadjON_OFF = 1 for isopyncal adjustment for and
 % -------------------------------------------------------------------------
 
 %%%
-floatfile = '9018SoOcnQC.mat';
-
+floatfile = '6401HawaiiQC';
+floatfile = '9018SoOcnQC';
+floatfile = '6976BermudaQC';
+floatfile = '0069BermudaQC';
+%startday = datenum(2013,1,1);
 % specify which tracers to include here
 %tracer_name = {'Ar','O2','O18','O17'};
-tracer_name = {'O2'};
+tracer_name = {'O2','NO3'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
 
@@ -78,7 +81,7 @@ if strcmpi(floatfile, '6403HawaiiQC.mat')
 elseif strcmpi(floatfile, '6403HawaiiQCx.mat')
     O2fact = 0.98;  % scaling factor for float O2
 elseif strcmpi(floatfile, '6401HawaiiQC.mat')
-    O2fact = 0.985;  % scaling factor for float O2
+    O2fact = 1.01;  % scaling factor for float O2
 elseif strcmpi(floatfile, '7622HawaiiQC.mat')
     O2fact = 0.985;  % scaling factor for float O2
 elseif strcmpi(floatfile, '6891HawaiiQC.mat')
@@ -96,24 +99,19 @@ end
 % -------------------------------------------------------------------------
 %  wind/gas exchange paramters
 % -------------------------------------------------------------------------
-
+%
+airseafunc = @fas_N11;
 % power of piston velocity
 pvpower = 2; 
 LowPassFactor = 0.99999; %1E-5;
 
-% Air sea exchange magnitude factors
-gasexfact = 0.9332;         % relative to Wanninkof 1992
-% Bubble flux parameters (see Stanley et al. 2009)
-Ac = 9.1E-11./4;            
-Ap = 2.3E-3./4;
-diffexp=2/3; betaexp=1; % exponents used in air injection equation for diffusivity and for solubilitiy, see gasexcha
-zbscale=0.5; % scaling factor for depth of bubble penetration -- see inigasa for details
 
 % -------------------------------------------------------------------------
 %  physical parameters
 % -------------------------------------------------------------------------
 
 % Ekman heat transport (W/m2)
+EkmHeatConv = 50;
 EkmHeatConv = 0;
 % Depth range of lateral heat flux (in 100's of meters)
 VHEC= 0.5;
@@ -163,7 +161,7 @@ end
  
  if loadprod == 1
      outdO2 = squeeze(outD_Tra(:,o2ind,2:end));
-     outdt = tyr.*repmat(diff(outt),nz,1);
+     outdt = repmat(diff(outt),nz,1);
      Prod = Prod + outdO2./outdt;
      tProd = (outt(:,1:end-1)+outt(:,2:end))./2;
      save(prodfile,'tProd','Prod','outdt');

@@ -8,7 +8,11 @@
 %
 
 %	first, we must recalculate weights to accomodate vertical vel.
-w0=wi0-wv(it)*wvf; wm=wim+wv(it)*wvf; w0(1)=wi0(1);
+w0=wi0-wv(it)*wvf; 
+wm=wim+wv(it)*wvf; 
+w0(1)=wi0(1);
+
+%used for tracers
 w0t=wi0t-wv(it)*wvf; wmt=wimt+wv(it)*wvf; w0t(1)=wi0t(1);
 
 %
@@ -30,13 +34,14 @@ w0t=wi0t-wv(it)*wvf; wmt=wimt+wv(it)*wvf; w0t(1)=wi0t(1);
   UV(1,:)=w0(1)*UVold(1,:)+wp(1)*UVold(2,:);
 
 
-  
-  for igas=1:ngas
-      gas = gases{igas};
-      Trold=Tracer(:,tr2ind(gas));
-      Tracer(2:nz-1,tr2ind(gas))=wmt(2:nz-1).*Trold(1:nz-2)+w0t(2:nz-1).*Trold(2:nz-1)+...
+  for ii = 1:ntracers
+      tr = ind2tr(ii);
+%   for igas=1:ngas
+%       gas = gases{igas};
+      Trold=Tracer(:,ii);
+      Tracer(2:nz-1,ii)=wmt(2:nz-1).*Trold(1:nz-2)+w0t(2:nz-1).*Trold(2:nz-1)+...
           wpt(2:nz-1).*Trold(3:nz);
-      Tracer(1,tr2ind(gas))=w0t(1)*Trold(1)+wpt(1)*Trold(2);
+      Tracer(1,ii)=w0t(1)*Trold(1)+wpt(1)*Trold(2);
   end
 
 

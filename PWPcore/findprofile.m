@@ -1,36 +1,26 @@
 % function to break Argo data into discrete profiles
 
-function [divev,dataout] = findprofile(data,zgrid,varcol)
+function [divev,dataout] = findFloatProfile(T,zgrid,varName)
 
-zcol = 8;
 
-bind = 1;
-tind = [];
-divev = NaN*zeros(size(data,1),1);
-diven = 1;
+
+
+divev = Table(size(T,1),1);
+
 
 
 nz = length(zgrid);
 
 %dataout = NaN*zeros(diven*nz,size(data,2));
 
-while 1
-    tind = find(isnan(data(bind:end,zcol)),1,'first')+bind-2;
-    divev(bind:tind) = diven;
-%     if diven == 189
-%         debug = 1;
-%     end
-    dvout = naninterp1(data(bind:tind,zcol),data(bind:tind,varcol),zgrid);
-    dataout(:,diven) = dvout;
+profs = unique(T.stn);
+nProfs = length(profs);
+for ii = 1:nProfs
+    d = T.stn == ii;
+    dataout(:,ii) = naninterp1(T.depth(d),T.varName(d),zgrid);
+end
     
-    % find start of next prof
-    bind = tind+2;
-    if bind > length(divev)
-        break
-    end
-    diven = diven + 1;
-end
-end
+   
 function [out] = naninterp1(x, Y, xi)
     MIN_DATA_POINTS = 5;
     szY = size(Y);

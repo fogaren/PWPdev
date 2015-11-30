@@ -94,7 +94,7 @@ GPVO = [];
 
 
 
-Zbub=zbscale*(0.3*wspeed-1.1);  %bubble penetration depth, parameterization from graham et al, 2004
-Zbub(Zbub<0)=0; % sets any negative values to 0
-phydro=rho_m*g*Zbub/atm_Pa; % calculates hydrostatic pressure in atm 
+% Zbub=zbscale*(0.3*wspeed-1.1);  %bubble penetration depth, parameterization from graham et al, 2004
+% Zbub(Zbub<0)=0; % sets any negative values to 0
+% phydro=rho_m*g*Zbub/atm_Pa; % calculates hydrostatic pressure in atm 
 

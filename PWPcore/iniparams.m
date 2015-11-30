@@ -6,11 +6,11 @@ atm_Pa = 101325.0;      % atmospheric pressure in Pa
 hcapy=1.e-6;			% heat capacity in deg/cal/m3
 j2cal=0.23905;			% joules -> calories
 tday = 60*60*24;        % seconds in a day
-tyr = tday*365.25;      % seconds in a year
-g = 9.807;              % grav. const. (m/s2)
+%tyr = tday*365.25;      % seconds in a year
+g = 9.80665;              % grav. const. (m/s2)
 rho_m = 1023;           % approx density
 R = 8.314;              % gas constant
-
+hfactor=540*1000/j2cal;	% converts watts to kg/s
 
 
 % -------------------------------------------------------------------------

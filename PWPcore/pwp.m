@@ -11,7 +11,7 @@
 
 iniparams;
 % inihydrors97;
-inifloatdata;
+[float, startday, stopday] = inifloatdata(float_path,floatfile,floatON_OFF);
 inihydrors;
 iniforcing;
 inifctraquik;               % Initialize useful factors
@@ -46,10 +46,9 @@ for it=1:nt
         dolight;                % calculate light field; adjust light according
     end                        % to observed isopycnal displacement
     oxyprod;                % add biological oxygen
-    %gasexchak;              % exchange gases
-    dogasex;
+    dogasex;                % exchange gases
     dogrino;                % do gradient  Ri No Adjustment
-    advdif;                 % advect and diffuse
+    advdif2;                 % advect and diffuse
     if floatON_OFF ~= 0 
         %modelout; 
         rho_nudge;

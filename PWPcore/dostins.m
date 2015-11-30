@@ -9,7 +9,7 @@
 %		downward until static stability is achieved
 %
 %Sig=Sigref+Alpha*(T-Tref)+Beta*(S-Sref);	% compute density profile
-Sig = sw_dens0(S,T);
+Sig = gsw_sigma0(S,T);
 mld=1;				% start with shoalest mixed layer
 for i=1:nz-1				% static stability adjustment
     if Sig(i) > Sig(i+1)	% if unstable mix density of mixed layer

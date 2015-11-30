@@ -50,7 +50,8 @@ for igas=1:ngas     % do all the gases
     
     % NEED to check - slp or patmdry?
     % Fluxes are in mol m-3 s-1
-    [geflux(igas),apflux(igas),acflux(igas),~,pv] = fbub_L13(Tracer(1,tr2ind(gas)),wspeed(it),S(1),T(1),slp(it),'O2');
+    [geflux(igas),acflux(igas),apflux(igas),~,pv] = airseafunc(Tracer(1,tr2ind(gas)),wspeed(it),S(1),T(1),slp(it),gas);
+    %[geflux(igas),apflux(igas),acflux(igas),~,pv] = fbub_L13(Tracer(1,tr2ind(gas)),wspeed(it),S(1),T(1),slp(it),'O2');
     Tracer(1:mld,tr2ind(gas))=Tracer(1:mld,tr2ind(gas)) + (geflux(igas)+acflux(igas)+apflux(igas))*dt/(dz*mld); %change in conc = old conc + change due to gas exchanve, complete trapping, partial trapping
     %the dt/dz/mld are to convert flux to a concentration change.
 

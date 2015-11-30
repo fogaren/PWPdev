@@ -4,7 +4,7 @@
 	T(1:mld)=mean(T(1:mld));
 	S(1:mld)=mean(S(1:mld));
 % 	Sig(1:mld)=mean(Sig(1:mld));
-    Sig = sw_dens0(S,T);
+    Sig = gsw_sigma0(S,T);
 	UVm=mean(UV(1:mld,:),1); 
 		UV(1:mld,1)=UVm(1)*ones(mld,1);
 		UV(1:mld,2)=UVm(2)*ones(mld,1);

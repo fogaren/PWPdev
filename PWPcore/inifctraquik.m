@@ -55,13 +55,13 @@ EkpMaxDep = 550;
 
 
 % calculated model parameters
-nyrs = stopday - startday;
+ndays = stopday - startday;
 dt=min([0.4*dz*dz/max(Kz) 0.4*dz*dz/max(Kt) dtmin]);	% time step must resolve diurnal scales (dt < 6 hours)
-z=[dz/2:dz:zmax-dz/2]'; nz=length(z); zp=[0:dz:zmax];	% useful depth vectors
-tmax=nyrs*tyr; nt=nyrs*tyr/dt;                  % time constants
-treport = tyr;  nreport = treport/dt;           % report once a year
+z=(dz/2:dz:zmax-dz/2)'; nz=length(z); zp=0:dz:zmax;       % useful depth vectors
+%tmax=nyrs*tyr;                  % time constants
+%treport = tyr;  nreport = treport/dt;           % report once a year
 
-t = startday:(dt./tyr):stopday;
+t = startday:(dt/tday):stopday;
 nt = length(t);
 %t=[1:nt]*dt/tyr + startday; tpf=2*pi*t/tyr;		% time vector, etc.
 % recording time interval: convert to number of time steps
@@ -90,8 +90,41 @@ oldcurl = F.CURL;
 %               note that the nyquist limit is 2 per day
 curl=filtfilt(b,a,F.CURL);    % and use a phase correcting implementation
 ekp=curl/rho_m/f;			% compute vert vel. (pos. down) from curl
-wv=interp1(F.DateTime,ekp,t,'linear');     % actual curl calculated
-nwmax=min(EkpMaxDep,zmax)/dz;wvf=dt*[[nwmax:-1:1]/nwmax zeros(1,nz-nwmax)]'/dz;
+% wv = max vertical velocity on model t-grid (pos. up)
+wv= -interp1(F.DateTime,ekp,t,'linear');     % actual curl calculated
+nwmax=min(EkpMaxDep,zmax)/dz;
+wvf=dt*[(nwmax:-1:1)/nwmax zeros(1,nz-nwmax)]'/dz;
+%wvf0 = [(nwmax:-1:1)/nwmax zeros(1,nz-nwmax)]';
+% upward w is positive
+wv_up = wv > 0;
+% vertical advection -  u*dt/dz (Courant number)
+Ct = wvf*wv;
+% average at edges between nodes
+Cte = (Ct(1:end-1,:)+Ct(2:end,:))./2;
+
+% do SUDM weighting for advection
+% wp is weigth factor for when w is positive (upwelling)
+%wf = zeros(nz-1,nt);
+%wf(:,wv_up) = Ct(2:end,wv_up) + Ct(1:end-1,~wv_up);
+
+% set up tridiagonal diffusion weighting
+wKz = Kz*dt/dz/dz*ones(nz,1);
+TDKz = diag(-wKz) + diag(wKz(2:end)./2,1) + diag(wKz(1:end-1)./2,-1);
+% set boundary conditions
+TDKz(1,1) = -wKz(2)./2;       % one-way diff for top box
+TDKz(end,end) = 0;            % bottom C doesn't change
+TDKz(end,end-1) = 0;          % bottom C doesn't change
+
+wKt = Kt*dt/dz/dz*ones(nz,1);
+TDKt = diag(-wKt) + diag(wKt(2:end)./2,1) + diag(wKt(1:end-1)./2,-1);
+% set boundary conditions
+TDKt(1,1) = -wKt(2)./2;       % one-way diff for top box
+TDKt(end,end) = 0;            % bottom C doesn't change
+TDKt(end,end-1) = 0;          % bottom C doesn't change
+
+% % diffusion coefficients are time-invariant
+% wim=Kz*dt/dz/dz*ones(nz,1); wp=wim; wim(1)=0; wi0=1-wp-wim; wi0(1)=1-wp(1);
+% wimt=Kt*dt/dz/dz*ones(nz,1); wpt=wimt; wimt(1)=0; wi0t=1-wpt-wimt; wi0t(1)=1-wpt(1);
 
 % -------------------------------------------------------------------------
 %		vertical attenuation of w, going to zero at base of seasonal layer
@@ -132,11 +165,14 @@ ResidualHeat = csaps(F.DateTime,TotHeat,LowPassFactor,F.DateTime);  % use lowpas
 % data for this locale partly compensated for ekman heat convergence
 % (associated with downwelling of warm surface water)
 rhf=-F.nSWRS*htfact; rhf=interp1(F.DateTime,rhf,t,'linear');
+%???
 thf=-(F.nLWRS + F.nLHTFL + F.nSHTFL - 0.*ResidualHeat)*htfact; 
+%thf=-(F.nLWRS + F.nLHTFL + F.nSHTFL - ResidualHeat)*htfact; 
+
 thf=interp1(F.DateTime,thf,t,'linear');
 slp=interp1(F.DateTime,F.PRES/atm_Pa,t,'linear');     % compute/interpolate sea level pressure pascals -> atmospheres
 % relative humidity in mm Hg?
-ph2o=F.RHUM/100.*Humidity(F.AIRT-273)/760; % compute partial pressure of water in atm
+ph2o=F.RHUM/100.*humidity(F.AIRT-273)/760; % compute partial pressure of water in atm
 ph2o=interp1(F.DateTime,ph2o,t,'linear'); 
 patmdry=slp-ph2o; % pressure of dry air in atm -- used in gasexhak
 
@@ -177,7 +213,6 @@ dRdz=-diff(0.62*exp(-1.67*zp)+0.38*exp(-0.05*zp))';
 % -------------------------------------------------------------------------
 
 FWfact=dt/dz;			% converts fw flux to salinity change
-hfactor=540 * 1000 / j2cal;	% converts watts to kg/s
 
 
 % -------------------------------------------------------------------------
@@ -226,8 +261,8 @@ zSigref = 124.989;
 %		are provisional and will be adjusted for wv in advdif.m
 %		(this is not done on a "wim")
 % -------------------------------------------------------------------------
- 
-wim=Kz*dt/dz/dz*ones(nz,1); wp=wim; wim(1)=0; wi0=1-wp-wim; wi0(1)=1-wp(1);
+
+wim=Kz*dt/dz/dz*ones(nz,1); wf=wim; wim(1)=0; wi0=1-wf-wim; wi0(1)=1-wf(1);
 wimt=Kt*dt/dz/dz*ones(nz,1); wpt=wimt; wimt(1)=0; wi0t=1-wpt-wimt; wi0t(1)=1-wpt(1);
 
 % -------------------------------------------------------------------------
