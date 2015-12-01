@@ -28,4 +28,4 @@ NumPerYear = 48; % screen output every # of recordings
 BRiFac=g*dz/rho_m;		% factor for bulk Ri No Calculation
 GRiFac=g*dz/rho_m;		% factor for Grad Ri No Calculation
 BRiCrit=.65; GRiCrit=.25;	% critical values for overturning
-TSOint_z = 600;         % z for depth integrated
+TSOint_z = 600;         % z for depth integrated values
