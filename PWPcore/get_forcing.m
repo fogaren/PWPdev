@@ -45,13 +45,13 @@ F.DateTime = [];
 % get forcing for each single year and then concatenate
 for yr = yrRng(1):yrRng(2)
     
+
     latyr = lat(datenVec(:,1) == yr);
     lonyr = lon(datenVec(:,1) == yr);
-
-    %t_yr = t(yrvec(:,1) == yr); 
+ 
 
     dn_tyr = t;%datenum(t_yr,1,1);
-    %dn_tyr = datenum(t_yr,1,1);
+
     % data domain for yr
     dn_trng = [min(dn_tyr) max(dn_tyr)];
     
@@ -80,12 +80,14 @@ for yr = yrRng(1):yrRng(2)
     
     % ncep time --> matlab datenumber
     % for some reason need to add a 48 hour offset....
+
     % some dates are referenced to yr 0, some to 1800?
     if time(1) > 1e7
         dntime = datenum(1,1,1)+(time-48)/24;
     else
         dntime = datenum(1800,1,1)+time/24;
     end
+
     % only select forcing up to last observation for final year..
     if yr  == yrRng(2)
         dntime = dntime(dntime <= dn_trng(2));
@@ -124,6 +126,7 @@ for yr = yrRng(1):yrRng(2)
     %dv = datevec(dntime);
     %[~, yearfrac] = date2doy(dntime);
     DateTime = dntime;%dec_year(dntime);
+
     
     u10m = zeros(nt,1);
     v10m = zeros(nt,1);
@@ -213,6 +216,7 @@ for yr = yrRng(1):yrRng(2)
         PRES(jj) = y_slp(ilo25,ila25,jj);
         RHUM(jj) = y_rhum(ilo25,ila25,jj);
         AIRT(jj) = y_air(ilo25,ila25,jj);
+
     end
     
     F.u10m = [F.u10m;u10m];
