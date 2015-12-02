@@ -1,3 +1,6 @@
+function [fnames] = float_list(float_path,fnames)
+
+if nargin < 2
 fnames = {
 '0069BermudaQC.txt',    '7567SoOcnQC.txt',      '8497HawaiiQC.txt',...
 '0276NoAtlanticQC.txt'	'7593Hawaii.txt',		'9018SoOcnQC.txt',...
@@ -14,15 +17,14 @@ fnames = {
 '0509SoOcnQC.txt',      '9096SoOcnQC.txt',      '0508SoOcnQC.txt',...
 '9313SoOcnQC.txt',      '0037SoOcnQC.txt',      '0412HawaiiQC.txt',...
 '8514HawaiiQC.txt',     '7620SoOcnQC.txt',      '7619SoOcnQC.txt'};
-
+end
 %fnames = {'5145HawaiiQC.txt'};
 froot = 'http://www.mbari.org/lobo/Data/FloatVizData/QC/';
-
 
 nf = length(fnames);
 for ii = 1:nf
     try
-        websave(fnames{ii},[froot fnames{ii}]);
+        websave(fullfile(float_path,fnames{ii}),[froot fnames{ii}]);
     catch
         disp(['error downloading ' froot fnames{ii}]);
     end

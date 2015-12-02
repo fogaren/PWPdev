@@ -9,13 +9,14 @@
 
 % CHANGE pwp_root to point to where PWP is located on your local machine
 pwp_root = '/Users/Roo/github/PWP/';
+data_root = '/Users/Roo/Documents/MATLAB/Datasets/';
 core_path = [pwp_root 'PWPcore'];
 lib_path = [pwp_root 'function_library'];
 
 % CHANGE these to point to files where ncep and argo float data is located
-float_path = [pwp_root 'floatdata'];
-glider_path = [pwp_root 'CMORE/HOE-DYLAN'];
-ncep_path = '/Users/Roo/Documents/MATLAB/Datasets/ncep.reanalysis';
+float_path = fullfile(data_root,'floatdata');
+glider_path = fullfile(data_root,'gliderdata');
+ncep_path = fullfile(data_root,'ncep.reanalysis');
 %
 % Path for core functions here
 addpath(core_path,0);
@@ -51,8 +52,8 @@ isoadjON_OFF = 0; % isoadjON_OFF = 1 for isopyncal adjustment for and
 %%%
 floatfile = '6401HawaiiQC';
 floatfile = '9018SoOcnQC';
-floatfile = '6976BermudaQC';
-floatfile = '0069BermudaQC';
+%floatfile = '6976BermudaQC';
+%floatfile = '0069BermudaQC';
 %startday = datenum(2013,1,1);
 % specify which tracers to include here
 %tracer_name = {'Ar','O2','O18','O17'};

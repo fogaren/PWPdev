@@ -2,7 +2,7 @@
 
 
 %tic
-%t0 = clock;
+t0 = clock;
 
 %
 % -------------------------------------------------------------------------
@@ -11,7 +11,8 @@
 
 iniparams;
 % inihydrors97;
-[float, startday, stopday] = inifloatdata(float_path,floatfile,floatON_OFF);
+inifloatdata;
+%[float, startday, stopday] = inifloatdata(float_path,floatfile,floatON_OFF);
 inihydrors;
 iniforcing;
 inifctraquik;               % Initialize useful factors
@@ -57,6 +58,6 @@ for it=1:nt
     
 end
 
-%etime(clock,t0)/60
+etime(clock,t0)/60
 
 %toc
