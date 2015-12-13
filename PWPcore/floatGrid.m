@@ -34,7 +34,7 @@ function [float] = floatGrid(float_path,floatfile,float_tracers,z)
     float.lat = naninterp1(float.t',float.lat',float.t)';
     float.sig0 = gsw_sigma0(float.S,float.T);
     %float.t(1:4,:) = repmat(float.t(5,:),4,1);
-    [float.zml, float.iml] = calcmld(gsw_sigma0(float.S,float.T),z,0.125);
+    [float.zml, float.iml] = calcmld(gsw_sigma0(float.S,float.T),z,0.03);
     
     ndives = size(float.T,2);
     nz = length(z);
@@ -59,6 +59,5 @@ function [float] = floatGrid(float_path,floatfile,float_tracers,z)
                 float.(tr)(:,ii),float.siggrid);
         end
     end
-    % seaglider data - need to sort by date - need to deal with Nan below
-    % 200m
+    
 

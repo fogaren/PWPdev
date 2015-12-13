@@ -3,7 +3,8 @@ function [Jbio, Jbio_int,Jbio_rng,tJbio] = Jbio_yr(yr,tProd,outdt,Prod,z,zint)
 % O2odt(:,1) = [];
 % outdt = diff(outt);
 % outdt = repmat(outdt,500,1);
-d = find(floor(tProd) == yr);
+dv = datevec(tProd);
+d = dv(:,1) == yr;
 tJbio = tProd(d);
 outdt = outdt(:,d);
 Prod = Prod(:,d);

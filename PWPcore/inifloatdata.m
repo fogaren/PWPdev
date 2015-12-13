@@ -7,7 +7,7 @@
 
 if floatON_OFF == 1
 
-    floatFileName = fullfile(float_path,floatfile);
+    floatFileName = fullfile(float_path,floatname);
     if exist([floatFileName,'.mat'],'file') > 0
         load(floatFileName,'FT')
     else
@@ -40,7 +40,7 @@ if floatON_OFF == 1
     float.lat = naninterp1(float.t',float.lat',float.t)';
     float.sig0 = gsw_sigma0(float.S,float.T);
     %float.t(1:4,:) = repmat(float.t(5,:),4,1);
-    [float.zml, float.iml] = calcmld(gsw_sigma0(float.S,float.T),z,0.125);
+    [float.zml, float.iml] = calcmld(gsw_sigma0(float.S,float.T),z,0.03);
     
     ndives = size(float.T,2);
     float.tr = zeros(nz,ndives,ntracers);

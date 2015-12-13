@@ -17,9 +17,6 @@ inihydrors;
 iniforcing;
 inifctraquik;               % Initialize useful factors
 inibio;                     % initialze biological parameters
-if ismember(tracer_name,'O18')
-    inio2isotopes;          % initialize oxygen isotope parameters
-end
 initracers;
 
 

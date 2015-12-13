@@ -1,4 +1,4 @@
-function [fnames] = float_list(float_path,fnames)
+function [fnames] = float_list(float_path,fnames,QCmode)
 
 if nargin < 2
 fnames = {
@@ -18,8 +18,13 @@ fnames = {
 '9313SoOcnQC.txt',      '0037SoOcnQC.txt',      '0412HawaiiQC.txt',...
 '8514HawaiiQC.txt',     '7620SoOcnQC.txt',      '7619SoOcnQC.txt'};
 end
+if nargin == 3
+    QC = QCmode;
+else
+    QC = 'QC/';
+end
 %fnames = {'5145HawaiiQC.txt'};
-froot = 'http://www.mbari.org/lobo/Data/FloatVizData/QC/';
+froot = ['http://www.mbari.org/lobo/Data/FloatVizData/' QC];
 
 nf = length(fnames);
 for ii = 1:nf

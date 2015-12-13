@@ -50,11 +50,12 @@ isoadjON_OFF = 0; % isoadjON_OFF = 1 for isopyncal adjustment for and
 % -------------------------------------------------------------------------
 
 %%%
-floatfile = '0069BermudaQC';
-
+floatname = '6401HawaiiQC';
+calfile = 'HOT_O2cal';
+load(calfile);
 % specify which tracers to include here
 %tracer_name = {'Ar','O2','O18','O17'};
-tracer_name = {'O2'};
+tracer_name = {'O2','NO3'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
 
@@ -69,29 +70,14 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 pfract = 0;
 bioON_OFF = 0;  % biology on/off switch for o2 isotopes.  1 = biology on, 0 = biology off  
 loadprod = 1;  % load NCP from file
-prodfile = ['inProd_',floatfile];
+prodfile = ['inProd_',floatname];
 %oxyamp =  10;%5;  % amplitude of NCP (mol O2 m-2 y-1)
 %oxycons= 18; % magnitude of biological consumption -- integrated
-c14_2_GPP = 2.7;  % set fixed GOP:NPP(14C) here
+%c14_2_GPP = 2.7;  % set fixed GOP:NPP(14C) here
 O2fact =1;
-if strcmpi(floatfile, '6403HawaiiQC.mat')
-    O2fact = 0.97;
-elseif strcmpi(floatfile, '6403HawaiiQCx.mat')
-    O2fact = 0.98;  % scaling factor for float O2
-elseif strcmpi(floatfile, '6401HawaiiQC.mat')
-    O2fact = 0.985;  % scaling factor for float O2
-elseif strcmpi(floatfile, '7622HawaiiQC.mat')
-    O2fact = 0.985;  % scaling factor for float O2
-elseif strcmpi(floatfile, '6891HawaiiQC.mat')
-    O2fact = 0.97;  % scaling factor for float O2
-elseif strcmpi(floatfile, '7672HawaiiQC.mat')
-    O2fact = 0.97;  % scaling factor for float O2
-elseif strcmpi(floatfile, '8374HOTQC.mat')
-    O2fact = 0.97;  % scaling factor for float O2   
-elseif strcmpi(floatfile, '8486HawaiiQC.mat')
-    O2fact = 0.97;  % scaling factor for float O2
-elseif strcmpi(floatfile, '8497HawaiiQC.mat')
-    O2fact = 0.96;  % scaling factor for float O2 
+if exist('scale_fac','var')
+    sf = strcmpi(floatname,uniqueFloats);
+    O2fact = scale_fac(sf);
 end
 
 % -------------------------------------------------------------------------
@@ -104,7 +90,7 @@ pvpower = 2;
 LowPassFactor = 0.99999; %1E-5;
 
 % Air sea exchange magnitude factors
-gasexfact = 0.9332;         % relative to Wanninkof 1992
+%gasexfact = 0.9332;         % relative to Wanninkof 1992
 % Bubble flux parameters (see Stanley et al. 2009)
 Ac = 9.1E-11./4;            
 Ap = 2.3E-3./4;
@@ -170,7 +156,7 @@ end
      tProd = (outt(:,1:end-1)+outt(:,2:end))./2;
      save(prodfile,'tProd','Prod','outdt');
      O2a = squeeze(Tra(:,1,:));
-     save([floatfile 'NCPdata.mat'],'ta','Ta','Sa','O2a','float');
+     save([floatname 'NCPdata.mat'],'ta','Ta','Sa','O2a','float');
  end
  %diagout_big;
  

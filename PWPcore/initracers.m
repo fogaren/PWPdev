@@ -17,10 +17,7 @@ gaslist = {'He','Ne','Ar','Kr','Xe','O2','O18','O17','O35','O36'};
 % identify which gases are to be run
 gases = intersect(gaslist,tracer_name);
 ngas = length(gases);
-if ngas > 1
-    % from BATS
-    load batsinitgas_99;
-end
+
 % Gas = zeros(nz,ngas);
 
 xG = zeros(length(ngas));

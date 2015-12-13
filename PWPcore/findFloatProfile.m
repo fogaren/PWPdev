@@ -7,7 +7,7 @@ profs = unique(T.stn(T.stn > 0));
 nProfs = length(profs);
 tout = nan(1,nProfs);
 for ii = 1:nProfs
-    d = T.stn == ii;
+    d = T.stn == profs(ii);
     dataout(:,ii) = naninterp1(T.depth(d),T.(varName)(d),zgrid);
     tout(ii) = nanmean(T.daten(d));
 end

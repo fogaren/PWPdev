@@ -50,13 +50,14 @@ isoadjON_OFF = 0; % isoadjON_OFF = 1 for isopyncal adjustment for and
 % -------------------------------------------------------------------------
 
 %%%
-floatfile = '6401HawaiiQC';
-floatfile = '9018SoOcnQC';
-%floatfile = '6976BermudaQC';
-%floatfile = '0069BermudaQC';
+%floatname = '6891HawaiiQC';
+%floatname = '6403HawaiiQC';
+%floatname = '0412HawaiiQC';
+%floatname = '6401HawaiiQC';
+%floatname = '5145HawaiiQC';
 %startday = datenum(2013,1,1);
 % specify which tracers to include here
-%tracer_name = {'Ar','O2','O18','O17'};
+
 tracer_name = {'O2','NO3'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
@@ -72,7 +73,7 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 pfract = 0;
 bioON_OFF = 0;  % biology on/off switch for o2 isotopes.  1 = biology on, 0 = biology off  
 loadprod = 1;  % load NCP from file
-prodfile = ['inProd_',floatfile];
+prodfile = ['inProd_',floatname];
 
 calfile = 'HOT_O2cal';
 load(calfile);
@@ -86,7 +87,7 @@ end
 %  wind/gas exchange paramters
 % -------------------------------------------------------------------------
 %
-airseafunc = @fas_N11;
+airseafunc = @fas_L13;
 % power of piston velocity
 pvpower = 2; 
 LowPassFactor = 0.99999; %1E-5;
@@ -98,7 +99,7 @@ LowPassFactor = 0.99999; %1E-5;
 
 % Ekman heat transport (W/m2)
 EkmHeatConv = 50;
-EkmHeatConv = 0;
+%EkmHeatConv = 0;
 % Depth range of lateral heat flux (in 100's of meters)
 VHEC= 0.5;
 % Ekman salt convergence (kg/m2/s)
@@ -152,7 +153,7 @@ end
      tProd = (outt(:,1:end-1)+outt(:,2:end))./2;
      save(prodfile,'tProd','Prod','outdt');
      O2a = squeeze(Tra(:,1,:));
-     save([floatfile 'NCPdata.mat'],'ta','Ta','Sa','O2a','float');
+     save([floatname 'NCPdata.mat'],'ta','Ta','Sa','O2a','float');
  end
  %diagout_big;
  
