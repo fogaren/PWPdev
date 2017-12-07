@@ -43,13 +43,13 @@ for igas = 1:ngas
         xG(igas) = gas_mole_fract('O2');
     elseif ismember(gas,float_tracers)
         % Luo: do not know how to amende this part
-        if floatON_OFF == 1 
+        if floatON == 1 
             %Tracer(:,tr2ind(gas)) = sw_dens0(float.S(:,3),float.T(:,3)).*float.tr(:,3,tr2ind(gas))./1e6;
             % initializes with 3rd dives because often first dive or two
             % are shallow and will not initialize entire water column
             Tracer(:,tr2ind(gas)) = float.tr(:,3,tr2ind(gas));
             %Tracer(499:end,tr2ind(gas)) = Tracer(498,tr2ind(gas));
-        elseif strcmpi(floatON_OFF,'glider')
+        elseif strcmpi(floatON,'glider')
             load([glider_path '/' tracerInitFile]);
             Tracer(:,tr2ind('O2')) = gasmoleq(S,T,'O2').*interp1(zInit,O2satInit,z);
         else

@@ -1,11 +1,4 @@
-
-
-%function [float, startday, stopday] = inifloatdata(float_path,floatfile,floatON_OFF)
-
-
-
-
-if floatON_OFF == 1
+if floatON == 1
 
     floatFileName = fullfile(float_path,floatfile);
     if exist([floatFileName,'.mat'],'file') > 0
@@ -75,7 +68,7 @@ if floatON_OFF == 1
     end
     % seaglider data - need to sort by date - need to deal with Nan below
     % 200m
-elseif strcmpi(floatON_OFF,'glider')
+elseif strcmpi(floatON,'glider')
     load([glider_path '/' gliderfile]);
     it = find(strcmp('dectime',data_header));
     %U = sortrows(UP,it);
@@ -113,6 +106,7 @@ elseif strcmpi(floatON_OFF,'glider')
     end
         
         
-        
+else
+    float_tracers = {''};
 end
 
