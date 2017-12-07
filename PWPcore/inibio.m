@@ -53,7 +53,8 @@ else
     % -------------------------------------------------------------------------
     
     % maximum Prod in June (.2)
-    PofT=(1+sin((t-2005.2)*pi*2));
+    startvec = datevec(startday);
+    PofT=(1+cos((t-datenum(startvec(1),6,1))/365.25*pi*2));
 end
 
 

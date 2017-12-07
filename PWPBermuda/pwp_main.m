@@ -22,20 +22,25 @@ addpath(core_path,0);
 % -------------------------------------------------------------------------
 % run date range (if commented out, will use 1st/last float profile dates)
 % -------------------------------------------------------------------------
+dz = 2;
+zmax = 500;
 
-startday = datenum(2012,1,1);
-stopday = datenum(2012,5,1);
+startday = datenum(2013,1,1);
+stopday = datenum(2014,1,1);
+lat0 = 60;
+lon0 = -30;
 
 % -------------------------------------------------------------------------
 % list of tracers to be run
 % -------------------------------------------------------------------------
-
+floatON_OFF = 0;
+addpath(fullfile(core_path,'float'));
 %%% model currently running for bermuda...
 floatfile = '6391BermudaQC';
 
 % specify which tracers to include here
 %tracer_name = {'Ar','O2','O18','O17'};
-tracer_name = {'O2','NO3'};
+tracer_name = {'O2','NO3','Ar'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
 
@@ -49,29 +54,19 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 % -------------------------------------------------------------------------
 pfract = 0;
 bioON_OFF = 0;  % biology on/off switch for o2 and o2 isotopes.  1 = biology on, 0 = biology off 
-loadprod = 1;  % load NCP from file
+loadprod = 0;  % load NCP from file
 prodfile = 'inProd.mat';
 
 oxyamp =  10;%5;  % amplitude of NCP (mol O2 m-2 y-1)
 oxycons= 18; % magnitude of biological consumption -- integrated
-c14_2_GPP = 2.7;  % set fixed GOP:NPP(14C) here
+%c14_2_GPP = 2.7;  % set fixed GOP:NPP(14C) here
 O2fact = 1.07;  % scaling factor for float O2
 
 % -------------------------------------------------------------------------
-%  wind/gas exchange paramters
+% smoothing factor for wind curl
 % -------------------------------------------------------------------------
-
-% power of piston velocity
-pvpower = 2; 
+airseafunc = @fas_L13;
 LowPassFactor = 1E-5;
-
-% Air sea exchange magnitude factors
-gasexfact = 0.9332;         % relative to Wanninkof 1992
-% Bubble flux parameters (see Stanley et al. 2009)
-Ac = 9.1E-11./4;            
-Ap = 2.3E-3./4;
-diffexp=2/3; betaexp=1; % exponents used in air injection equation for diffusivity and for solubilitiy, see gasexcha
-zbscale=0.5; % scaling factor for depth of bubble penetration -- see inigasa for details
 
 % -------------------------------------------------------------------------
 %  physical parameters
@@ -84,7 +79,7 @@ EkmHeatConv = 12;
 VHEC= 2;
 % Ekman salt convergence due to fresh water downward pumping
 EkmSaltConv = 1.75E-6;  
-
+VSEC = VHEC;
 % Vertical diffusivity (m2/s)
 Kz = 8*1e-5;
 TracerDiffFactor = 1;

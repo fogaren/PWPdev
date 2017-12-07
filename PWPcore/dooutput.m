@@ -37,8 +37,7 @@ if now == 0
     %Anom = cat(3,Anom, anom); 
 %     Tra=cat(3,Tra, Tracer);
     Tra(:,:,iout) = Tracer(:,:);
-    GPVO = [GPVO gpvo]; %Hel3=[Hel3 He3]; Tritium=[Tritium Trit]; %R18O = [R18O r18o]; R17O = [R17O r17o]; %O18 = [O18 o18]; O17 = [O17 o17]; 
-%    Acflux=[Acflux acflux]; Apflux=[Apflux apflux]; Geflux=[Geflux geflux]; % diagnostics for ai part, ai comp, gas ex fluxes all in units of ncc/g (or ucc/g)
+    GPVO = [GPVO gpvo]; 
     Acflux=[Acflux acfluxcum]; Apflux=[Apflux apfluxcum]; Geflux=[Geflux gefluxcum]; % diagnostics for ai part, ai comp, gas ex fluxes all in units of ncc/g (or ucc/g)
     FluxNum=[FluxNum fluxcumnum];
     acfluxcum=zeros(ngas,1); apfluxcum=zeros(ngas,1); gefluxcum=zeros(ngas,1); % reset fluxes to start accumulating again
@@ -50,10 +49,5 @@ if now == 0
 
    
     nbri=0;ngri=0;nstin=0;		% reset activity counters
-    %he3flux=tday*4.45*he3flux/n3flux;  He3Flux=[He3Flux he3flux];     % average & save helium 3 flux info as %-m/d
-    %he3flux=0; n3flux=0;                % reset counter and accumulator
-    if isoadjON_OFF
-        tempa = [tempa, SigDisFact];
-    end
 end
 

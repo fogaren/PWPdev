@@ -172,7 +172,7 @@ thf=-(F.nLWRS + F.nLHTFL + F.nSHTFL - 0.*ResidualHeat)*htfact;
 thf=interp1(F.DateTime,thf,t,'linear');
 slp=interp1(F.DateTime,F.PRES/atm_Pa,t,'linear');     % compute/interpolate sea level pressure pascals -> atmospheres
 % relative humidity in mm Hg?
-ph2o=F.RHUM/100.*Humidity(F.AIRT-273)/760; % compute partial pressure of water in atm
+ph2o=F.RHUM/100.*vpress(S(1),T(1)); % compute partial pressure of water in atm
 ph2o=interp1(F.DateTime,ph2o,t,'linear'); 
 patmdry=slp-ph2o; % pressure of dry air in atm -- used in gasexhak
 

@@ -17,10 +17,10 @@ gaslist = {'He','Ne','Ar','Kr','Xe','O2','O18','O17','O35','O36'};
 % identify which gases are to be run
 gases = intersect(gaslist,tracer_name);
 ngas = length(gases);
-if ngas > 1
-    % from BATS
-    load batsinitgas_99;
-end
+% if ngas > 1
+%     % from BATS
+%     load batsinitgas_99;
+% end
 % Gas = zeros(nz,ngas);
 
 xG = zeros(length(ngas));
@@ -53,12 +53,13 @@ for igas = 1:ngas
             load([glider_path '/' tracerInitFile]);
             Tracer(:,tr2ind('O2')) = gasmoleq(S,T,'O2').*interp1(zInit,O2satInit,z);
         else
-            Tracer(:,tr2ind(gas)) = sw_dens0(S,T).*(zeros(size(S))+0.1)./1e6;
+            % This initializes whole water column at 100% sat
+            Tracer(:,tr2ind('O2')) = gasmoleq(S,T,gas);
         end
         xG(igas) = gasmolfract(gas);
     else
         Tracer(:,tr2ind(gas)) = gasmoleq(S,T,gas);
-        xG(igas) = gas_mole_fract(gas);
+        xG(igas) = gasmolfract(gas);
 %         ini = find(strcmp(gas,initgas_head));
 %         Tracer(:,tr2ind(gas)) = interp1(initgas(:,1),initgas(:,ini),z).*gasmoleq(S,T,gas)./100;
 %         xG(igas) = gas_mole_fract(gas);
@@ -90,7 +91,7 @@ apfluxcum=zeros(ngas,1); % diagnostic: cumulative air injection partial trapping
 gefluxcum=zeros(ngas,1); % diagnostic: cumulative gas exchange flux -- used to accumulate fluxes since last recording
 fluxcumnum=0; % initizalize number of data points being accumulated in the fluxes so know how to interpret the numbers
 FluxNum=fluxcumnum; % use to store fluxcumnum for reporting purposes
-GPVO = [];
+GPVO = [];gpvo = [];
 
 
 
