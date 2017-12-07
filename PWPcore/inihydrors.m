@@ -1,12 +1,7 @@
 % -------------------------------------------------------------------------
 %	IniHydro - sets initial conditions for the hydrography
 %
-%		Initial conditions : ML Depth = 140 m
-%				     Tml = 19.5 C
-%				     Sml = 36.60 psu
-%		Boundary conditions : (@ zmax)
-%				     Tbot = 18.0
-%				     Sbot = 36.49
+%		Interpolates first float profile to model grid
 % -------------------------------------------------------------------------
 
 

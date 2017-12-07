@@ -8,23 +8,30 @@
 % PWP paths
 
 % CHANGE pwp_root to point to where PWP is located on your local machine
-pwp_root = '/Users/Roo/Documents/';
-core_path = [pwp_root 'PWPdev/PWPcore'];
-lib_path = [pwp_root 'PWPdev/function_library'];
+pwp_root = '/Users/dnicholson/Documents/github/';
+core_path = fullfile(pwp_root, 'PWPdev/PWPcore');
+lib_path = fullfile(pwp_root, 'PWPdev/function_library');
 
 % CHANGE these to point to files where ncep and argo float data is located
-float_path = '/Users/Roo/Documents/ArgoPWP/Floatdata';
-ncep_path = '/Users/Roo/Documents/MATLAB/Datasets/ncep.reanalysis';
+float_path = '/Users/dnicholson/Documents/MATLAB/Datasets/floatdata';
+ncep_path = '/Users/dnicholson/Documents/MATLAB/Datasets/ncep.reanalysis';
 %
 % Path for core functions here
 addpath(core_path,0);
+
+% -------------------------------------------------------------------------
+% run date range (if commented out, will use 1st/last float profile dates)
+% -------------------------------------------------------------------------
+
+startday = datenum(2012,1,1);
+stopday = datenum(2012,5,1);
 
 % -------------------------------------------------------------------------
 % list of tracers to be run
 % -------------------------------------------------------------------------
 
 %%% model currently running for bermuda...
-floatfile = '6391Bermuda.mat';
+floatfile = '6391BermudaQC';
 
 % specify which tracers to include here
 %tracer_name = {'Ar','O2','O18','O17'};
@@ -41,7 +48,7 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 %  biology parameters
 % -------------------------------------------------------------------------
 pfract = 0;
-bioON_OFF = 1;  % biology on/off switch for o2 and o2 isotopes.  1 = biology on, 0 = biology off 
+bioON_OFF = 0;  % biology on/off switch for o2 and o2 isotopes.  1 = biology on, 0 = biology off 
 loadprod = 1;  % load NCP from file
 prodfile = 'inProd.mat';
 
@@ -87,10 +94,10 @@ Kt = TracerDiffFactor*Kz;
 dens_off = 0.05;
 
 % restoring parameters
-Trestore = 1;
-tau_T = 30;
-Srestore = 1;
-tau_S = 30;
+% Trestore = 1;
+% tau_T = 30;
+% Srestore = 1;
+% tau_S = 30;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

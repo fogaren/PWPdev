@@ -55,7 +55,7 @@ for igas = 1:ngas
         else
             Tracer(:,tr2ind(gas)) = sw_dens0(S,T).*(zeros(size(S))+0.1)./1e6;
         end
-        xG(igas) = gas_mole_fract(gas);
+        xG(igas) = gasmolfract(gas);
     else
         Tracer(:,tr2ind(gas)) = gasmoleq(S,T,gas);
         xG(igas) = gas_mole_fract(gas);
