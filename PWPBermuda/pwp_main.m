@@ -23,23 +23,30 @@ addpath(core_path,0);
 % run date range (if commented out, will use 1st/last float profile dates)
 % -------------------------------------------------------------------------
 dz = 2;
-zmax = 500;
+zmax = 1000;
 
 startday = datenum(2013,1,1);
-stopday = datenum(2014,1,1);
+stopday = datenum(2014,2,1);
 lat0 = 60;
 lon0 = -30;
 
 % -------------------------------------------------------------------------
-% list of tracers to be run
+% fixed location or float following
 % -------------------------------------------------------------------------
-floatON_OFF = 0;
+floatON = 0;
 addpath(fullfile(core_path,'float'));
 %%% model currently running for bermuda...
-floatfile = '6391BermudaQC';
+if floatON == 1
+    floatfile = '6391BermudaQC';
+else
+    hydroinitfunc = @inihydrors97;
+end
 
+% -------------------------------------------------------------------------
+% list of tracers to be run
+% -------------------------------------------------------------------------
 % specify which tracers to include here
-%tracer_name = {'Ar','O2','O18','O17'};
+
 tracer_name = {'O2','NO3','Ar'};
 ntracers = length(tracer_name);
 tracer_ind = num2cell(1:ntracers);
@@ -53,7 +60,7 @@ tr2ind = containers.Map(tracer_name,tracer_ind);
 %  biology parameters
 % -------------------------------------------------------------------------
 pfract = 0;
-bioON_OFF = 0;  % biology on/off switch for o2 and o2 isotopes.  1 = biology on, 0 = biology off 
+bioON_OFF = 0;  % biology on/off switch for o2 isotopes.  1 = biology on, 0 = biology off 
 loadprod = 0;  % load NCP from file
 prodfile = 'inProd.mat';
 

@@ -17,13 +17,13 @@ try
         stopday = F.DateTime(end);
     end
 catch
-    if floatON_OFF == 1 || strcmpi('glider',floatON_OFF)
+    if floatON == 1 || strcmpi('glider',floatON)
         %tbuff = 10./365; % 10 day buffer for loading forcing
         tbuff = 10;
         fltrng = find(float.t > startday - tbuff & float.t < stopday + tbuff);
         F = get_forcing(ncep_path,float.lat(fltrng),float.lon(fltrng),float.t(fltrng));
         latitude = float.lat_mean;
-    elseif floatON_OFF == 0
+    elseif floatON == 0
         tseries = startday:1/4:stopday;
         latseries = tseries*0 + lat0;
         lonseries = tseries*0 + lon0;

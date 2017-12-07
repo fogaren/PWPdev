@@ -11,7 +11,7 @@ t0 = clock;
 
 iniparams;
 inifloatdata;
-inihydrors;
+inihydro;
 iniforcing;
 inifctraquik;               % Initialize useful factors
 inibio;                     % initialze biological parameters
@@ -39,13 +39,13 @@ for it=1:nt
     dogasex;                % exchange gases
     dogrino;                % do gradient  Ri No Adjustment
     advdif;                 % advect and diffuse
-    if floatON_OFF ~= 0     % restore physical profile to obs
+    if floatON ~= 0         % restore physical profile to obs
         rho_nudge;
     end                     
     dooutput;               % if time, save data
     
 end
 
-etime(clock,t0)/60
+disp(['run completed in: ',num2str(etime(clock,t0)/60),' minutes']);
 
 %toc
