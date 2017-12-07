@@ -26,9 +26,9 @@ dz = 2;
 zmax = 1000;
 
 startday = datenum(2013,1,1);
-stopday = datenum(2014,2,1);
-lat0 = 60;
-lon0 = -30;
+stopday = datenum(2015,1,1);
+lat0 = 31.67;
+lon0 = -64.167;
 
 % -------------------------------------------------------------------------
 % fixed location or float following
