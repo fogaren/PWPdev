@@ -1,7 +1,8 @@
 % stirs two density layers when grad. Ri is unstable
 	Tm=mean(T(ii:ii+1));T(ii:ii+1)=Tm*ones(2,1);
 	Sm=mean(S(ii:ii+1));S(ii:ii+1)=Sm*ones(2,1); 
-	Sigm=mean(Sig(ii:ii+1)); Sig(ii:ii+1)=Sigm*ones(2,1);
+% 	Sigm=mean(Sig(ii:ii+1)); Sig(ii:ii+1)=Sigm*ones(2,1);
+    Sig = gsw_sigma0(S,T);
 	UVm=mean(UV(ii:ii+1,:)); 
 		UV(ii:ii+1,1)=UVm(1)*ones(2,1);
 		UV(ii:ii+1,2)=UVm(2)*ones(2,1);
