@@ -8,7 +8,7 @@
 function [] = updatencep(yr,outdir)
 
 % open connection to noaa server
-ft = ftp('ftp.cdc.noaa.gov','anonymous','XXXXX@whoi.edu');
+ft = ftp('ftp2.psl.noaa.gov','anonymous','fogaren@bc.edu');
 
 datapath = '/Datasets/ncep.reanalysis';
 
